@@ -1,0 +1,818 @@
+<!--
+
+    Copyright (C) 2009-2023 SAP SE or an SAP affiliate company. All rights reserved.
+
+-->
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns:semantic="sap.m.semantic" xmlns:form="sap.ui.layout.form"
+	xmlns:layout="sap.ui.layout" xmlns:unified="sap.ui.unified" xmlns="sap.m"
+	xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+	controllerName="ehs.inc.reportincidents1.controller.CreateIncident">
+	<semantic:DetailPage id="createIncidentPage" navButtonPress="onCancel" showNavButton="{device>/system/phone}"
+		title="{createView>/viewTitle}">
+		<semantic:content>
+			<layout:VerticalLayout id="idVerticalLayoutNewIncidentForm" class="sapUiResponsiveContentPadding" width="100%">
+				<layout:content>
+					<form:SimpleForm id="newIncidentForm" editable="true" layout="ResponsiveGridLayout" columnsM="1" labelSpanM="4" emptySpanM="1" columnsL="1"
+						labelSpanL="3" emptySpanL="4" title="{= ${appView>/sScreenSize} === 'Phone' ? '' : ${path: 'i18n>incidentInformationFormTitle'}}"
+						width="100%">
+						<form:content>
+							<!--What has happened-->
+							<Label id="idLabelWhatHappened" labelFor="idWhatHappened" required="true" text="{i18n>incidentDescription}"/>
+							<TextArea id="idWhatHappened" placeholder="{i18n>descrEventInput}" value="{IncidentDescriptionOfEvents}"
+								app:mandatoryErrorMessage="{i18n>noIncidentDescription}" width="100%"/>
+							<!-- Extension point for adding information in the incident with regard to what happened. -->
+							<core:ExtensionPoint name="CustomerExtensionForIncidentDescriptionOfEvenets"/>
+							<!--Pictures-->
+							<FlexBox id="idPictureFlexBox" alignItems="Center" justifyContent="Start">
+								<layoutData>
+									<layout:GridData id="idGridDataAddImage" indent="L4 M4 S0" span="L4 M7 S12"/>
+								</layoutData>
+								<items>
+									<Button id="idButtonAddImage" icon="sap-icon://add-photo" press="onAddCordovaPicture" visible="{= ${appView>/bIsOfflineEnabled}}"
+										enabled="{= ${appView>/data/iNumberOfPictures} &lt; ${constants>/MODEL/ODATA/MAX_NUMBER_OF_PICTURES}}" tooltip="{i18n>addPictureTooltip}"
+										class="sapUiSmallMarginEnd"/>
+									<unified:FileUploader id="idFileUploaderImage" maximumFileSize="15" buttonOnly="true" visible="{= !${appView>/bIsOfflineEnabled}}"
+										enabled="{= ${appView>/data/iNumberOfPictures} &lt; ${constants>/MODEL/ODATA/MAX_NUMBER_OF_PICTURES}}" change="onAddFileUploaderPicture"
+										icon="sap-icon://add-photo" tooltip="{i18n>addPictureTooltip}" iconOnly="true" multiple="true" typeMissmatch="handleTypeMissmatch"
+										fileType="png,jpg,gif,jpeg" class="sapUiSmallMarginEnd"/>
+									<layout:HorizontalLayout allowWrapping="true" content="{appView>/data/aPictures}" id="imagesLayout">
+										<layout:content>
+											<Image id="idImage" class="sapUiSmallMarginEnd" press="onPressPicture" height="3em" src="{appView>source}" alt="{i18n>pictureAltText}"/>
+										</layout:content>
+									</layout:HorizontalLayout>
+								</items>
+							</FlexBox>
+							<!-- Extension point for pictures section. -->
+							<core:ExtensionPoint name="CustomerExtensionForPictures"/>
+							<!--When did it happen-->
+							<Label id="idLabelDateTimePicker" labelFor="idDateTimePicker" required="true" text="{i18n>incidentDate}"/>
+							<DateTimePicker id="idDateTimePicker"
+								value="{path:'IncidentUTCDateTime', type:'sap.ui.model.type.DateTime', formatOptions: { style: 'medium/short', strictParsing: true}}"
+								app:mandatoryErrorMessage="{i18n>invalidDateTime}" change="onChangeDateTime" placeholder="{i18n>dateTimeInput}"/>
+							<!-- Extension point for adding information about incident date. -->
+							<core:ExtensionPoint name="CustomerExtensionForWhenIncidentHappened"/>
+							<!--Where did it happen-->
+							<Label id="idLabelIncidentLocation" labelFor="idIncidentLocation" text="{i18n>incidentLocation}"/>
+							<Input id="idIncidentLocation" placeholder="{i18n>locInputPlaceholder}" showValueHelp="true" value="{appView>/data/sLocationName}"
+								showSuggestion="true" startSuggestion="2" suggestionItemSelected="._onSuggestionItemSelected" suggest=".handleLocationSuggest"
+								filterSuggests="false">
+								<suggestionColumns>
+									<Column id="idColumnIncidentLocationName" hAlign="Begin" popinDisplay="Inline" demandPopin="true">
+										<Label id="idLabelIncidentLocationName" text="{/#C_EHSLocationValueHelpType/EHSLocationName/@sap:label}"/>
+									</Column>
+									<Column id="idColumnIncidentLocationId" hAlign="Center" popinDisplay="Inline" demandPopin="true">
+										<Label id="idLabelIncidentLocationId" text="{/#C_EHSLocationValueHelpType/EHSLocationID/@sap:label}"/>
+									</Column>
+									<Column id="idColumnIncidentLocationType" hAlign="Begin" popinDisplay="Inline" demandPopin="true">
+										<Label id="idLabelIncidentLocationType" text="{/#C_EHSLocationValueHelpType/EHSLocationType/@sap:label}"/>
+									</Column>
+								</suggestionColumns>
+							</Input>
+							<Input id="LocationDescription" placeholder="{i18n>exactLocInput}" value="{IncidentLocationDescription}">
+								<layoutData>
+									<layout:GridData id="idGridDataLocationDescription" indent="L4 M4 S0" span="L4 M7 S12"/>
+								</layoutData>
+							</Input>
+							<Label id="GeoLocationLabel" text="{i18n>geoLocation}" labelFor="releaseGEO"/>
+							<RadioButtonGroup id="GeoLocationRadioButton" selectedIndex="1" ariaLabelledBy="GeoLocationLabel" visible="false" columns="2">
+								<buttons>
+									<RadioButton id="GeoLocationRadioButtonYes" class="sapUiMediumMarginEnd" text="{i18n>yes}" ariaLabelledBy="GeoLocationLabel"/>
+									<RadioButton id="GeoLocationRadioButtonNo" text="{i18n>no}" ariaLabelledBy="GeoLocationLabel"/>
+								</buttons>
+							</RadioButtonGroup>
+							<!-- Extension point for adding location information in the incident. -->
+							<core:ExtensionPoint name="CustomerExtensionForIncidentLocation"/>
+							<!--Has anyone been injured-->
+							<Label id="personRadioButtonLabel" text="{path: 'IncidentCategory', formatter: '.formatter.formatPersonQuestion'}"
+								required="{appView>/data/bIsPersonInvolved}" labelFor="personsContainer"/>
+							<RadioButtonGroup id="personRadioButton" ariaLabelledBy="personRadioButtonLabel" columns="2" select="onSelectPersonRadioButton">
+								<buttons>
+									<RadioButton id="personRadioButtonYes" class="sapUiMediumMarginEnd" text="{i18n>yes}" ariaLabelledBy="personRadioButtonLabel"/>
+									<RadioButton id="personRadioButtonNo" text="{i18n>no}" ariaLabelledBy="personRadioButtonLabel"/>
+								</buttons>
+							</RadioButtonGroup>
+							<VBox id="personsContainer" visible="{appView>/data/bIsPersonInvolved}" fieldGroupIds="personInputFilterGroup">
+								<layoutData>
+									<layout:GridData id="idGridDataPersonAdditional" indent="L4 M4 S0" span="L4 M7 S12"/>
+								</layoutData>
+								<FlexBox id="personInputContainer" fieldGroupIds="personInputContainerGroup">
+									<Input id="personInput" placeholder="{i18n>personInput}" fieldGroupIds="personInputFilterGroup" maxLength="40" value="{PersonFullName}"
+										app:mandatoryErrorMessage="{path: 'createView>/incidentCategory', formatter: '.formatter.formatPersonError'}"
+										app:mandatoryErrorDescription="{path: 'createView>/incidentCategory', formatter: '.formatter.formatPersonErrorLong'}" showValueHelp="true"
+										valueHelpRequest=".onPersonValueHelp" showSuggestion="true" startSuggestion="2" suggestionItemSelected=".onPersonSuggestionItemSelected"
+										suggest=".handlePersonSuggest" filterSuggests="false">
+										<layoutData>
+											<FlexItemData id="idGridDataPerson" growFactor="3"/>
+										</layoutData>
+										<suggestionColumns>
+											<Column id="idColumnIncidentPersonNameId" hAlign="Begin" popinDisplay="Inline" demandPopin="true">
+												<Label id="idLabelIncidentPersonNameId" text="{i18n>personNameBPId}"/>
+											</Column>
+											<Column id="idColumnIncidentPersonWorkAgreementId" hAlign="Center" popinDisplay="Inline" demandPopin="true">
+												<Label id="idLabelIncidentPersonWorkAgreementId" text="{i18n>personWorkAgreementId}"/>
+											</Column>
+										</suggestionColumns>
+									</Input>
+									<Button id="removeInputForInjuredPerson" press="_onDeletePersonInput" icon="sap-icon://sys-cancel" type="Reject"
+										tooltip="{i18n>removePersonTooltip}"/>
+								</FlexBox>
+								<FlexBox id="injuredPersonAddAnother">
+									<Button id="addInputForInjuredPerson" text="{path: 'createView>/incidentCategory', formatter: '.formatter.formatAddPersonButtonText'}"
+										press="onAddInputForPerson"/>
+								</FlexBox>
+							</VBox>
+							<!--Are there any witnesses-->
+							<Label id="witnessRadioButtonLabel" text="{i18n>incidentWitness}" required="{appView>/data/bIsThereWitness}" labelFor="witnessesContainer"/>
+							<RadioButtonGroup id="witnessRadioButton" visible="{=${IncidentCategory}!==${constants>/MODEL/ODATA/INC_CAT_SAFE_OBS}}"
+								ariaLabelledBy="witnessRadioButtonLabel" columns="2" select="onSelectPersonRadioButton">
+								<buttons>
+									<RadioButton id="witnessRadioButtonYes" class="sapUiMediumMarginEnd" text="{i18n>yes}" ariaLabelledBy="witnessRadioButtonLabel"/>
+									<RadioButton id="witnessRadioButtonNo" text="{i18n>no}" ariaLabelledBy="witnessRadioButtonLabel"/>
+								</buttons>
+							</RadioButtonGroup>
+							<VBox id="witnessesContainer" visible="{appView>/data/bIsThereWitness}" fieldGroupIds="witnessInputFilterGroup">
+								<layoutData>
+									<layout:GridData id="idGridDataWitnessAdditional" indent="L4 M4 S0" span="L4 M7 S12"/>
+								</layoutData>
+								<FlexBox id="witnessInputContainer" fieldGroupIds="witnessInputContainerGroup">
+									<Input core:require="{ formatMessage: 'sap/base/strings/formatMessage' }" id="witnessInput" fieldGroupIds="witnessInputFilterGroup"
+										placeholder="{i18n>personInput}" maxLength="40" value="{PersonFullName}"
+										app:mandatoryErrorMessage="{parts: ['i18n>noPersonName', 'i18n>witnessRole'], formatter: 'formatMessage'}"
+										app:mandatoryErrorDescription="{parts: ['i18n>noPersonNameLong', 'i18n>witnessRole'], formatter: 'formatMessage'}" showValueHelp="true"
+										valueHelpRequest=".onPersonValueHelp" showSuggestion="true" startSuggestion="2" suggestionItemSelected=".onPersonSuggestionItemSelected"
+										suggest=".handlePersonSuggest" filterSuggests="false">
+										<layoutData>
+											<FlexItemData id="idGridDataWitness" growFactor="3"/>
+										</layoutData>
+										<suggestionColumns>
+											<Column id="idColumnIncidentWitnessNameId" hAlign="Begin" popinDisplay="Inline" demandPopin="true">
+												<Label id="idLabelIncidentWitnessNameId" text="{i18n>personNameBPId}"/>
+											</Column>
+											<Column id="idColumnIncidentWitnessWorkAgreementId" hAlign="Center" popinDisplay="Inline" demandPopin="true">
+												<Label id="idLabelIncidentWitnessWorkAgreementId" text="{i18n>personWorkAgreementId}"/>
+											</Column>
+										</suggestionColumns>
+									</Input>
+									<Button id="removeInputForWitness" press="_onDeleteWitnessInput" icon="sap-icon://sys-cancel" type="Reject"
+										tooltip="{i18n>removePersonTooltip}"/>
+								</FlexBox>
+								<Button core:require="{ formatMessage: 'sap/base/strings/formatMessage' }" id="addInputForWitness"
+									text="{parts: ['i18n>addAnotherPerson', 'i18n>witnessRole'], formatter: 'formatMessage'}" press="onAddInputForPerson"/>
+							</VBox>
+							<!-- Extension point for adding information about persons involved in incident. -->
+							<core:ExtensionPoint name="CustomerExtensionForInvolvedPersons"/>
+							<!--Has anything been damaged-->
+							<Label id="assetRadioButtonLabel" text="{i18n>damagedAsset}" required="{appView>/data/bIsAssetInvolved}" labelFor="assetInput"/>
+							<RadioButtonGroup id="assetRadioButton" ariaLabelledBy="assetRadioButtonLabel"
+								visible="{parts: [{path: 'IncidentCategory'},{path: 'constants>/MODEL/ODATA/INC_CAT_INC'}], formatter: '.formatter.hideSection'}"
+								columns="2" select="onSelectAssetRadioButton">
+								<buttons>
+									<RadioButton id="assetRadioButtonYes" class="sapUiMediumMarginEnd" text="{i18n>yes}" ariaLabelledBy="assetRadioButtonLabel"/>
+									<RadioButton id="assetRadioButtonNo" text="{i18n>no}" ariaLabelledBy="assetRadioButtonLabel"/>
+								</buttons>
+							</RadioButtonGroup>
+							<!-- Extension point for adding information about damaged equipment. -->
+							<core:ExtensionPoint name="CustomerExtensionForDamagedEquipment"/>
+							<Input id="assetInput" placeholder="{i18n>assetInput}" maxLength="40" value="{AssetInvolvedName}"
+								app:mandatoryErrorMessage="{i18n>noEquipmentName}" app:mandatoryErrorDescription="{i18n>noEquipmentNameLong}"
+								visible="{appView>/data/bIsAssetInvolved}">
+								<layoutData>
+									<layout:GridData id="idGridDataAsset" indent="L4 M4 S0" span="L4 M7 S12"/>
+								</layoutData>
+							</Input>
+							<!--Has anything been released-->
+							<Label id="releaseRadioButtonLabel" text="{i18n>releasedChemicals}" labelFor="releaseRadioButton"/>
+							<RadioButtonGroup id="releaseRadioButton" ariaLabelledBy="releaseRadioButtonLabel"
+								visible="{parts: [{path: 'IncidentCategory'},{path: 'constants>/MODEL/ODATA/INC_CAT_INC'}], formatter: '.formatter.hideSection'}"
+								columns="2" select="onSelectReleaseRadioButton">
+								<buttons>
+									<RadioButton id="releaseRadioButtonYes" class="sapUiMediumMarginEnd" text="{i18n>yes}" ariaLabelledBy="releaseRadioButtonLabel"/>
+									<RadioButton id="releaseRadioButtonNo" text="{i18n>no}" ariaLabelledBy="releaseRadioButtonLabel"/>
+								</buttons>
+							</RadioButtonGroup>
+							<!-- Extension point for adding information about damaged equipment. -->
+							<core:ExtensionPoint name="CustomerExtensionForReleases"/>
+							<VBox id="releaseContainer" visible="{appView>/data/bIsReleaseInvolved}">
+								<layoutData>
+									<layout:GridData id="idGridDataRelease" indent="L4 M4 S0" span="L4 M7 S12"/>
+								</layoutData>
+								<Label id="releaseTypeLabel" text="{i18n>releaseType}" labelFor="releaseType"/>
+								<Select id="releaseType" selectedKey="{ReleaseType}" forceSelection="false" items="{path: '/ReleaseTypes',sorter: { path: 'Description' }}">
+									<core:Item id="idItemReleaseType" key="{Code}" text="{Description}"/>
+								</Select>
+								<Label id="releaseChemicalLabel" text="{i18n>releaseChemical}" required="{appView>/data/bIsReleaseInvolved}" labelFor="releaseChemical"/>
+								<Input id="releaseChemical" placeholder="{i18n>releaseChemicalPhd}" maxLength="40" value="{MaterialDesc}"
+									app:mandatoryErrorMessage="{i18n>noMaterialName}" app:mandatoryErrorDescription="{i18n>noMaterialNameLong}"/>
+								<Label id="releaseAmountLabel" text="{i18n>releaseAmount}" labelFor="releaseChemical"/>
+								<Input id="releaseAmount" placeholder="{i18n>releaseAmountPhd}" maxLength="12"
+									value="{ path: 'MaterialRelQuan', type: 'sap.ui.model.odata.type.Decimal', constraints: { precision: 12, minimum: '0', minimumExclusive: true, scale: 'variable' } }"/>
+								<Label id="releaseUOMDescLabel" text="{i18n>releaseUOM}" labelFor="releaseUOM"/>
+								<Input id="releaseUOM" placeholder="{i18n>releaseUOMPhd}" maxLength="60" value="{appView>/data/sUOMDescription}" showValueHelp="true"
+									valueHelpOnly="true" valueHelpRequest="onUOMValueHelp" app:mandatoryErrorMessage="{i18n>noUOMName}"
+									app:mandatoryErrorDescription="{i18n>noUOMNameLong}"/>
+							</VBox>
+							<!--Are there any groups-->
+							<Label id="groupsRadioButtonLabel" text="{path: 'IncidentCategory', formatter: '.formatter.formatGroupsQuestion'}"
+								required="{appView>/data/bIsGroupsInvolved}" labelFor="mcGroup"/>
+							<RadioButtonGroup id="groupsRadioButton" ariaLabelledBy="releaseRadioButtonLabel"
+								visible="{=${IncidentCategory}!==${constants>/MODEL/ODATA/INC_CAT_INC}}" columns="2" select="onSelectGroupRadioButton">
+								<buttons>
+									<RadioButton id="groupRadioButtonYes" class="sapUiMediumMarginEnd" text="{i18n>yes}" ariaLabelledBy="releaseRadioButtonLabel"/>
+									<RadioButton id="groupRadioButtonNo" text="{i18n>no}" ariaLabelledBy="releaseRadioButtonLabel"/>
+								</buttons>
+							</RadioButtonGroup>
+							<VBox id="groupContainer" visible="{appView>/data/bIsGroupsInvolved}">
+								<layoutData>
+									<layout:GridData id="idGridDataGroups" indent="L4 M4 S0" span="L4 M7 S12"/>
+								</layoutData>
+								<MultiComboBox id="mcGroup" app:mandatoryErrorMessage="{i18n>noGroupsSelected}" app:mandatoryErrorDescription="{i18n>noGroupsSelectedLong}"
+									placeholder="{i18n>selectCircumstances}" items="{ path: '/I_IncidentGroupUnion'}">
+									<core:Item id="idItemIncidentGroupCode" key="{IncidentGroupCode}" text="{IncidentGroupCode_Text}"/>
+								</MultiComboBox>
+							</VBox>
+							<Label id="estRiskTypeLabel" text="{i18n>estimatedRisk}" labelFor="estRiskType"/>
+							<ComboBox id="estRiskType" placeholder="{i18n>selectEstRisk}" items="{path: '/EstRiskTypes',sorter: { path: 'Description' }}"
+								visible="{appView>/data/bIsGroupsInvolved}" change="onChangeEstRiskType">
+								<core:Item id="idItemEstRiskType" key="{Code}" text="{Description}"/>
+							</ComboBox>
+							<!-- Extension point for adding new sections in the Report Incident view. -->
+							<core:ExtensionPoint name="CustomerExtensionForCreateIncident"/>
+							<!-- Incident Classification -->
+<Label text=""/>
+<RadioButtonGroup id="incidentClassRB" columns="4" select="onClassificationChange">
+    <buttons>
+        <RadioButton text="GOR"/>
+        <RadioButton text="HSR"/>
+        <RadioButton text="DGOR"/>
+        <RadioButton text="SOR"/>
+    </buttons>
+</RadioButtonGroup>
+
+
+<!-- Reporting Person -->
+<Label text="Reporting Person"/>
+<Input showValueHelp="true" value="{ReporterFullName}"/>
+
+<!-- Contact Number -->
+<Label text="Contact Number"/>
+<Input value="{ReporterPhone}"/>
+
+<!-- Date and Time of the Incident -->
+<Label text="Date and Time of the Incident"/>
+<DateTimePicker value="{IncidentUTCDateTime}"/>
+
+<!-- Reported Station -->
+<Label text="Reported Station"/>
+<Input value="{ReportedStation}"/>
+
+<!-- Location -->
+<Label text="Location"/>
+<Input value="{appView>/data/sLocationName}" showValueHelp="true"/>
+
+<!-- Was there any evidence -->
+<Label text="Was there any evidence"/>
+<Input value="{Evidence}"/>
+
+<!-- Occurrence Type -->
+<Label text="Occurrence Type"/>
+
+<!-- <Select id="occTypeSelect"
+        width="100%"
+        forceSelection="false"
+        items="{createView>/occTypes}">
+    <core:Item key="{key}" text="{text}"/>
+</Select> -->
+<Select id="occTypeSelect"
+        width="100%" change="onOccTypeChange">
+</Select>
+
+<!-- GSE : GSE Accident -->
+<Label text="GSE Accident" visible="{= ${gse>/visible} }"/>
+
+<Label text="GSE Involved" visible="{= ${gse>/visible} }"/>
+<Input visible="{= ${gse>/visible} }"/>
+
+<Button text="Add Multiple Assets" visible="{= ${gse>/visible} }"/>
+
+<Label text="GSE Belongs To" visible="{= ${gse>/visible} }"/>
+<Input visible="{= ${gse>/visible} }"/>
+
+<Label text="Any Property Damage" visible="{= ${gse>/visible} }"/>
+<Input visible="{= ${gse>/visible} }"/>
+
+<Label text="Property Damage Details" visible="{= ${gse>/visible} }"/>
+<Input visible="{= ${gse>/visible} }"/>
+
+<Label text="Was any material released" visible="{= ${gse>/visible} }"/>
+<Input visible="{= ${gse>/visible} }"/>
+
+<Label text="Stand No" visible="{= ${gse>/visible} }"/>
+<Input visible="{= ${gse>/visible} }"/>
+
+<Label text="Involved Staff" visible="{= ${gse>/visible} }"/>
+<Input visible="{= ${gse>/visible} }"/>
+
+<Button text="Add Multiple Involved Persons" visible="{= ${gse>/visible} }"/>
+
+<!-- GSE1 : Aircraft Damage Noticed -->
+<Label text="Airline involved" visible="{= ${gse1>/visible} }"/>
+<Input visible="{= ${gse1>/visible} }"/>
+
+<Label text="Flight No" visible="{= ${gse1>/visible} }"/>
+<Input visible="{= ${gse1>/visible} }"/>
+
+<Label text="Aircraft type" visible="{= ${gse1>/visible} }"/>
+<Input visible="{= ${gse1>/visible} }"/>
+
+<Label text="Registration" visible="{= ${gse1>/visible} }"/>
+<Input visible="{= ${gse1>/visible} }"/>
+
+<Label text="Stand No" visible="{= ${gse1>/visible} }"/>
+<Input visible="{= ${gse1>/visible} }"/>
+
+<Label text="Involved Staff" visible="{= ${gse1>/visible} }"/>
+<Input visible="{= ${gse1>/visible} }"/>
+
+<Label text="Operations phase" visible="{= ${gse1>/visible} }"/>
+<Input visible="{= ${gse1>/visible} }"/>
+
+<Label text="Origin" visible="{= ${gse1>/visible} }"/>
+<Input visible="{= ${gse1>/visible} }"/>
+
+<Label text="Destination" visible="{= ${gse1>/visible} }"/>
+<Input visible="{= ${gse1>/visible} }"/>
+
+<Label text="Scheduled Dep" visible="{= ${gse1>/visible} }"/>
+<DateTimePicker visible="{= ${gse1>/visible} }"/>
+
+<Label text="Actual Dep" visible="{= ${gse1>/visible} }"/>
+<DateTimePicker visible="{= ${gse1>/visible} }"/>
+
+<Label text="GSE involved" visible="{= ${gse1>/visible} }"/>
+<Input visible="{= ${gse1>/visible} }"/>
+
+<Button text="Add Multiple Involved Persons" visible="{= ${gse1>/visible} }"/>
+
+<!-- GSE2 : Aircraft Damage Noticed -->
+
+<Label text="Airline involved" visible="{= ${gse2>/visible} }"/>
+<Input visible="{= ${gse2>/visible} }"/>
+
+<Label text="Flight No" visible="{= ${gse2>/visible} }"/>
+<Input visible="{= ${gse2>/visible} }"/>
+
+<Label text="Aircraft type" visible="{= ${gse2>/visible} }"/>
+<Input visible="{= ${gse2>/visible} }"/>
+
+<Label text="Registration" visible="{= ${gse2>/visible} }"/>
+<Input visible="{= ${gse2>/visible} }"/>
+
+<Label text="Stand No" visible="{= ${gse2>/visible} }"/>
+<Input visible="{= ${gse2>/visible} }"/>
+
+<Label text="Involved Staff" visible="{= ${gse2>/visible} }"/>
+<Input visible="{= ${gse2>/visible} }"/>
+
+<Label text="Operations phase" visible="{= ${gse2>/visible} }"/>
+<Input visible="{= ${gse2>/visible} }"/>
+
+<Label text="Origin" visible="{= ${gse2>/visible} }"/>
+<Input visible="{= ${gse2>/visible} }"/>
+
+<Label text="Destination" visible="{= ${gse2>/visible} }"/>
+<Input visible="{= ${gse2>/visible} }"/>
+
+<Label text="Scheduled Dep" visible="{= ${gse2>/visible} }"/>
+<DateTimePicker visible="{= ${gse2>/visible} }"/>
+
+<Label text="GSE involved" visible="{= ${gse2>/visible} }"/>
+<Input visible="{= ${gse2>/visible} }"/>
+
+<Button text="Add Multiple Involved Persons" visible="{= ${gse2>/visible} }"/>
+
+<!-- GSE3 : Aircraft Loading Error -->
+
+<Label text="Loading Error type" visible="{= ${gse3>/visible} }"/>
+<Select visible="{= ${gse3>/visible} }"/>
+
+<Label text="Airline" visible="{= ${gse3>/visible} }"/>
+<Input visible="{= ${gse3>/visible} }"/>
+
+<Label text="Flight No" visible="{= ${gse3>/visible} }"/>
+<Input visible="{= ${gse3>/visible} }"/>
+
+<Label text="Aircraft type" visible="{= ${gse3>/visible} }"/>
+<Input visible="{= ${gse3>/visible} }"/>
+
+<Label text="Registration" visible="{= ${gse3>/visible} }"/>
+<Input visible="{= ${gse3>/visible} }"/>
+
+<Label text="Stand No" visible="{= ${gse3>/visible} }"/>
+<Input visible="{= ${gse3>/visible} }"/>
+
+<Label text="Involved Staff" visible="{= ${gse3>/visible} }"/>
+<Input visible="{= ${gse3>/visible} }"/>
+
+<Label text="Flown / Not Flown" visible="{= ${gse3>/visible} }"/>
+<Select visible="{= ${gse3>/visible} }"/>
+
+<Label text="Weight difference" visible="{= ${gse3>/visible} }"/>
+<Input visible="{= ${gse3>/visible} }"/>
+
+<Label text="Origin - Destination" visible="{= ${gse3>/visible} }"/>
+<Input visible="{= ${gse3>/visible} }"/>
+
+<Label text="Scheduled Dep" visible="{= ${gse3>/visible} }"/>
+<DateTimePicker visible="{= ${gse3>/visible} }"/>
+
+<Label text="Actual Dep" visible="{= ${gse3>/visible} }"/>
+<DateTimePicker visible="{= ${gse3>/visible} }"/>
+
+<Label text="GSE involved" visible="{= ${gse3>/visible} }"/>
+<Input visible="{= ${gse3>/visible} }"/>
+
+<Button text="Add Multiple Involved Persons" visible="{= ${gse3>/visible} }"/>
+<!-- GSE4 : Boarding / Check-in Error -->
+
+<Label text="Pax flown / Not flown" visible="{= ${gse4>/visible} }"/>
+<Select visible="{= ${gse4>/visible} }"/>
+
+<Label text="Airline" visible="{= ${gse4>/visible} }"/>
+<Input visible="{= ${gse4>/visible} }"/>
+
+<Label text="Flight No" visible="{= ${gse4>/visible} }"/>
+<Input visible="{= ${gse4>/visible} }"/>
+
+<Label text="Aircraft type" visible="{= ${gse4>/visible} }"/>
+<Input visible="{= ${gse4>/visible} }"/>
+
+<Label text="Boarding Gate No" visible="{= ${gse4>/visible} }"/>
+<Input visible="{= ${gse4>/visible} }"/>
+
+<Label text="Stand No" visible="{= ${gse4>/visible} }"/>
+<Input visible="{= ${gse4>/visible} }"/>
+
+<Label text="Involved Staff" visible="{= ${gse4>/visible} }"/>
+<Input visible="{= ${gse4>/visible} }"/>
+
+<Label text="Pax joining / transit" visible="{= ${gse4>/visible} }"/>
+<Select visible="{= ${gse4>/visible} }"/>
+
+<Label text="Origin - Destination" visible="{= ${gse4>/visible} }"/>
+<Input visible="{= ${gse4>/visible} }"/>
+
+<Label text="Scheduled Dep" visible="{= ${gse4>/visible} }"/>
+<DateTimePicker visible="{= ${gse4>/visible} }"/>
+
+<Label text="Actual Dep" visible="{= ${gse4>/visible} }"/>
+<DateTimePicker visible="{= ${gse4>/visible} }"/>
+
+<Button text="Add Multiple Involved Persons" visible="{= ${gse4>/visible} }"/>
+<!-- JSE : Injured / Sick Staff -->
+
+<Label text="Causality type" visible="{= ${jse>/visible} }"/>
+<Select visible="{= ${jse>/visible} }"/>
+
+<Label text="Nature of injury / illness" visible="{= ${jse>/visible} }"/>
+<Select visible="{= ${jse>/visible} }"/>
+
+<Label text="Injured staff company name" visible="{= ${jse>/visible} }"/>
+<Input visible="{= ${jse>/visible} }"/>
+
+<Label text="Injured / sick staff belongs to" visible="{= ${jse>/visible} }"/>
+<Select visible="{= ${jse>/visible} }"/>
+
+<Label text="Body parts affected" visible="{= ${jse>/visible} }"/>
+<Input visible="{= ${jse>/visible} }"/>
+
+<Label text="IP staff number" visible="{= ${jse>/visible} }"/>
+<Input visible="{= ${jse>/visible} }"/>
+
+<Label text="IP mob number" visible="{= ${jse>/visible} }"/>
+<Input visible="{= ${jse>/visible} }"/>
+
+<Label text="IP email address" visible="{= ${jse>/visible} }"/>
+<Input visible="{= ${jse>/visible} }"/>
+
+<Label text="Detailed description of incident location" visible="{= ${jse>/visible} }"/>
+<TextArea visible="{= ${jse>/visible} }"/>
+
+<Label text="More than 1 person injured" visible="{= ${jse>/visible} }"/>
+<Select visible="{= ${jse>/visible} }">
+   <core:Item key="Y" text="Yes"/>
+   <core:Item key="N" text="No"/>
+</Select>
+
+<Label text="Additional Injured / sick staff details" visible="{= ${jse>/visible} }"/>
+<TextArea visible="{= ${jse>/visible} }"/>
+<!-- JSE1 : Post Incident Action -->
+
+<Label text="Line Manager notified" visible="{= ${jse1>/visible} }"/>
+<RadioButtonGroup columns="2" visible="{= ${jse1>/visible} }">
+   <buttons>
+      <RadioButton text="Yes"/>
+      <RadioButton text="No"/>
+   </buttons>
+</RadioButtonGroup>
+
+<Label text="First aid provided?" visible="{= ${jse1>/visible} }"/>
+<RadioButtonGroup columns="2" visible="{= ${jse1>/visible} }">
+   <buttons>
+      <RadioButton text="Yes"/>
+      <RadioButton text="No"/>
+   </buttons>
+</RadioButtonGroup>
+
+<Label text="Ambulance service involved" visible="{= ${jse1>/visible} }"/>
+<RadioButtonGroup columns="2" visible="{= ${jse1>/visible} }">
+   <buttons>
+      <RadioButton text="Yes"/>
+      <RadioButton text="No"/>
+   </buttons>
+</RadioButtonGroup>
+
+<Label text="Went to airport clinic" visible="{= ${jse1>/visible} }"/>
+<RadioButtonGroup columns="2" visible="{= ${jse1>/visible} }">
+   <buttons>
+      <RadioButton text="Yes"/>
+      <RadioButton text="No"/>
+   </buttons>
+</RadioButtonGroup>
+
+<Label text="Went external hospital" visible="{= ${jse1>/visible} }"/>
+<RadioButtonGroup columns="2" visible="{= ${jse1>/visible} }">
+   <buttons>
+      <RadioButton text="Yes"/>
+      <RadioButton text="No"/>
+   </buttons>
+</RadioButtonGroup>
+
+<Label text="Line Manager name" visible="{= ${jse1>/visible} }"/>
+<Input visible="{= ${jse1>/visible} }"/>
+
+<Label text="First aid provider name" visible="{= ${jse1>/visible} }"/>
+<Input visible="{= ${jse1>/visible} }"/>
+
+<!-- JSE2 : Incident Witness Details -->
+
+<Label text="Witness name" visible="{= ${jse2>/visible} }"/>
+<Input visible="{= ${jse2>/visible} }"/>
+
+<Label text="Witness company name" visible="{= ${jse2>/visible} }"/>
+<Input visible="{= ${jse2>/visible} }"/>
+
+<Label text="Witness employee ID" visible="{= ${jse2>/visible} }"/>
+<Input visible="{= ${jse2>/visible} }"/>
+
+<Label text="Witness contact number" visible="{= ${jse2>/visible} }"/>
+<Input visible="{= ${jse2>/visible} }"/>
+
+<Label text="Witness statement attached" visible="{= ${jse2>/visible} }"/>
+<RadioButtonGroup columns="2" visible="{= ${jse2>/visible} }">
+   <buttons>
+      <RadioButton text="Yes"/>
+      <RadioButton text="No"/>
+   </buttons>
+</RadioButtonGroup>
+
+<!-- JSE3 : Any GSE Involvement in Injury Case -->
+
+<Label text="GSE 1 Involved" visible="{= ${jse3>/visible} }"/>
+<Input visible="{= ${jse3>/visible} }"/>
+
+<Label text="GSE 1 No" visible="{= ${jse3>/visible} }"/>
+<Input visible="{= ${jse3>/visible} }"/>
+
+<Label text="GSE belongs to" visible="{= ${jse3>/visible} }"/>
+<Input visible="{= ${jse3>/visible} }"/>
+
+<Label text="GSE 2 Involved" visible="{= ${jse3>/visible} }"/>
+<Input visible="{= ${jse3>/visible} }"/>
+
+<Label text="GSE 2 No" visible="{= ${jse3>/visible} }"/>
+<Input visible="{= ${jse3>/visible} }"/>
+
+<Label text="GSE belongs to" visible="{= ${jse3>/visible} }"/>
+<Input visible="{= ${jse3>/visible} }"/>
+
+<Label text="Any Property damage" visible="{= ${jse3>/visible} }"/>
+<Input visible="{= ${jse3>/visible} }"/>
+
+<Label text="Property damage details" visible="{= ${jse3>/visible} }"/>
+<TextArea visible="{= ${jse3>/visible} }"/>
+
+<Label text="Was any material released" visible="{= ${jse3>/visible} }"/>
+<Input visible="{= ${jse3>/visible} }"/>
+
+<Label text="Location" visible="{= ${jse3>/visible} }"/>
+<Select visible="{= ${jse3>/visible} }"/>
+
+<Label text="GSE Operator name" visible="{= ${jse3>/visible} }"/>
+<Input visible="{= ${jse3>/visible} }"/>
+
+<Label text="Operator statement available" visible="{= ${jse3>/visible} }"/>
+<RadioButtonGroup columns="2" visible="{= ${jse3>/visible} }">
+   <buttons>
+      <RadioButton text="Yes"/>
+      <RadioButton text="No"/>
+   </buttons>
+</RadioButtonGroup>
+
+<Label text="Operator Contact number" visible="{= ${jse3>/visible} }"/>
+<Input visible="{= ${jse3>/visible} }"/>
+
+<!-- kSE : DGOR Dangerous Goods -->
+
+<Label text="Airline" visible="{= ${kse>/visible} }"/>
+<Input visible="{= ${kse>/visible} }"/>
+
+<Label text="Flight Date" visible="{= ${kse>/visible} }"/>
+<DatePicker visible="{= ${kse>/visible} }"/>
+
+<Label text="Flight Number" visible="{= ${kse>/visible} }"/>
+<Input visible="{= ${kse>/visible} }"/>
+
+<Label text="Aircraft Registration" visible="{= ${kse>/visible} }"/>
+<Input visible="{= ${kse>/visible} }"/>
+
+<Label text="Aircraft type" visible="{= ${kse>/visible} }"/>
+<Input visible="{= ${kse>/visible} }"/>
+
+<Label text="Origin Airport" visible="{= ${kse>/visible} }"/>
+<Select visible="{= ${kse>/visible} }"/>
+
+<Label text="Destination airport" visible="{= ${kse>/visible} }"/>
+<Select visible="{= ${kse>/visible} }"/>
+
+<Label text="Origin of the goods" visible="{= ${kse>/visible} }"/>
+<Input visible="{= ${kse>/visible} }"/>
+
+<Label text="Proper shipping name" visible="{= ${kse>/visible} }"/>
+<Input visible="{= ${kse>/visible} }"/>
+
+<Label text="UN/ID number" visible="{= ${kse>/visible} }"/>
+<Input visible="{= ${kse>/visible} }"/>
+
+<Label text="Class/division" visible="{= ${kse>/visible} }"/>
+<Select visible="{= ${kse>/visible} }"/>
+
+<Label text="Subsidiary hazard(s)" visible="{= ${kse>/visible} }"/>
+<Select visible="{= ${kse>/visible} }"/>
+
+<Label text="Packing group" visible="{= ${kse>/visible} }"/>
+<Select visible="{= ${kse>/visible} }"/>
+
+<Label text="Category (class 7 only)" visible="{= ${kse>/visible} }"/>
+<Select visible="{= ${kse>/visible} }"/>
+
+<Label text="Type of packaging" visible="{= ${kse>/visible} }"/>
+<Input visible="{= ${kse>/visible} }"/>
+
+<Label text="Packaging specification marking" visible="{= ${kse>/visible} }"/>
+<Input visible="{= ${kse>/visible} }"/>
+
+<Label text="Number of Packages" visible="{= ${kse>/visible} }"/>
+<Input type="Number" visible="{= ${kse>/visible} }"/>
+
+<Label text="Quantity / Transport index" visible="{= ${kse>/visible} }"/>
+<Input visible="{= ${kse>/visible} }"/>
+
+<Label text="Air Waybill reference number" visible="{= ${kse>/visible} }"/>
+<Input visible="{= ${kse>/visible} }"/>
+
+<Label text="Courier pouch / baggage tag / passenger ticket" visible="{= ${kse>/visible} }"/>
+<Input visible="{= ${kse>/visible} }"/>
+
+<Label text="Name and address of shipper/agent/passenger" visible="{= ${kse>/visible} }"/>
+
+
+<Label text="Packaging OK?" visible="{= ${kse>/visible} }"/>
+<RadioButtonGroup columns="2" visible="{= ${kse>/visible} }">
+ <buttons>
+  <RadioButton text="Yes"/>
+  <RadioButton text="No"/>
+ </buttons>
+</RadioButtonGroup>
+
+<Label text="Properly Secure" visible="{= ${kse>/visible} }"/>
+<RadioButtonGroup columns="2" visible="{= ${kse>/visible} }">
+ <buttons>
+  <RadioButton text="Yes"/>
+  <RadioButton text="No"/>
+ </buttons>
+</RadioButtonGroup>
+
+<Label text="Leakage" visible="{= ${kse>/visible} }"/>
+<RadioButtonGroup columns="2" visible="{= ${kse>/visible} }">
+ <buttons>
+  <RadioButton text="Yes"/>
+  <RadioButton text="No"/>
+ </buttons>
+</RadioButtonGroup>
+
+<Label text="DGR Declaration Available" visible="{= ${kse>/visible} }"/>
+<RadioButtonGroup columns="2" visible="{= ${kse>/visible} }">
+ <buttons>
+  <RadioButton text="Yes"/>
+  <RadioButton text="No"/>
+ </buttons>
+</RadioButtonGroup>
+
+<Label text="Ground Phase of Event" visible="{= ${kse>/visible} }"/>
+<Select visible="{= ${kse>/visible} }"/>
+
+<!-- HSE Main -->
+
+<Label text="Threat Type" visible="{= ${hse>/visible} }"/>
+<Select visible="{= ${hse>/visible} }"/>
+
+<Label text="Threat Sub-type" visible="{= ${hse>/visible} }"/>
+<Select visible="{= ${hse>/visible} }"/>
+<Label text="Was an aircraft involved?" visible="{= ${hse>/visible} }"/>
+
+<RadioButtonGroup columns="2"
+   visible="{= ${hse>/visible} }"
+   select=".onAircraftSelect">
+
+   <buttons>
+      <RadioButton text="Yes"/>
+      <RadioButton text="No"/>
+   </buttons>
+
+</RadioButtonGroup>
+<!-- HSE was there aircraft involved? -->
+
+<Label text="Airline" visible="{= ${hse>/aircraft} }"/>
+<Input visible="{= ${hse>/aircraft} }"/>
+
+<Label text="Flight Date" visible="{= ${hse>/aircraft} }"/>
+<DatePicker visible="{= ${hse>/aircraft} }"/>
+
+<Label text="Flight Number" visible="{= ${hse>/aircraft} }"/>
+<Input visible="{= ${hse>/aircraft} }"/>
+
+<Label text="Aircraft Registration" visible="{= ${hse>/aircraft} }"/>
+<Input visible="{= ${hse>/aircraft} }"/>
+
+<Label text="Aircraft Type" visible="{= ${hse>/aircraft} }"/>
+<Input visible="{= ${hse>/aircraft} }"/>
+
+<Label text="Stand" visible="{= ${hse>/aircraft} }"/>
+<Input visible="{= ${hse>/aircraft} }"/>
+<!-- HSE was there person involved? -->
+
+
+<Label text="Was a passenger involved?" visible="{= ${hse>/visible} }"/>
+
+<RadioButtonGroup columns="2"
+   visible="{= ${hse>/visible} }"
+   select=".onPassengerSelect">
+
+   <buttons>
+      <RadioButton text="Yes"/>
+      <RadioButton text="No"/>
+   </buttons>
+</RadioButtonGroup>
+
+<!-- HSE was there person involved? yes fields -->
+<Label text="Pax Name" visible="{= ${hse>/pax} }"/>
+<Input visible="{= ${hse>/pax} }"/>
+
+<Label text="Pax Nationality" visible="{= ${hse>/pax} }"/>
+<Input visible="{= ${hse>/pax} }"/>
+
+<Label text="Seat Number" visible="{= ${hse>/pax} }"/>
+<Input visible="{= ${hse>/pax} }"/>
+
+<Label text="Pax Contact" visible="{= ${hse>/pax} }"/>
+<Input visible="{= ${hse>/pax} }"/>
+
+<Label text="Gate" visible="{= ${hse>/pax} }"/>
+<Input visible="{= ${hse>/pax} }"/>
+
+
+<!-- Occurrence Classification -->
+<Label text="Occurrence Classification"/>
+<Select>
+    <core:Item key="1" text="Minor"/>
+    <core:Item key="2" text="Major"/>
+</Select>
+
+
+
+						</form:content>
+					</form:SimpleForm>
+				</layout:content>
+			</layout:VerticalLayout>
+		</semantic:content>
+		<semantic:messagesIndicator>
+			<semantic:MessagesIndicator id="messageIndicator" press="onPressMessagesButton"/>
+		</semantic:messagesIndicator>
+		<semantic:mainAction>
+			<semantic:MainAction id="save" press="onSave" text="{i18n>sendIncident}"/>
+		</semantic:mainAction>
+		<semantic:cancelAction>
+			<semantic:CancelAction id="cancel" press="onCancel"/>
+		</semantic:cancelAction>
+	</semantic:DetailPage>
+</mvc:View>

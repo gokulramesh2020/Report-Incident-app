@@ -1,0 +1,60 @@
+{
+	"_version": "1.1.0",
+	"sap.app": {
+		"_version": "1.1.0",
+		"id": "customer.reportincidntapp.variant",
+		"type": "application",
+		"applicationVersion": {
+			"version": "1.0.0"
+		},
+		"title": "{{appTitle}}",
+		"sourceTemplate": {
+			"id": "generator-extensibilty-sub",
+			"version": "1.0.0"
+		}
+	},
+	"sap.ui": {
+		"_version": "1.1.0",
+		"technology": "UI5",
+		"icons": {
+			"icon": "sap-icon://detail-view",
+			"favIcon": ""
+		},
+		"deviceTypes": {
+			"desktop": false,
+			"tablet": true,
+			"phone": true
+		},
+		"supportedThemes": [
+			"sap_hcb",
+			"sap_bluecrystal",
+			"sap_belize"
+		]
+	},
+	"sap.ui5": {
+		"_version": "1.1.0",
+		"dependencies": {
+			"minUI5Version": "1.114.1"
+		},
+		"extends": {
+			"component": "ehs.inc.reportincidents1",
+			"extensions": {
+				"sap.ui.viewReplacements": {
+					"ehs.inc.reportincidents1.view.CreateIncident": {
+						"viewName": "customer.reportincidntapp.variant.view.CreateIncidentCustom",
+						"type": "XML"
+					}
+				},
+				"sap.ui.controllerExtensions": {
+					"ehs.inc.reportincidents1.controller.CreateIncident": {
+						"controllerName": "customer.reportincidntapp.variant.controller.CreateIncidentCustom"
+					}
+				}
+			}
+		},
+		"contentDensities": {
+			"compact": true,
+			"cozy": true
+		}
+	}
+}
