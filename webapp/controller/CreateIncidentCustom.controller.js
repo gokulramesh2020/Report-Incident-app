@@ -858,44 +858,115 @@ setTimeout(function () {
 
     oSelect.removeAllItems();
 
-    if (sKey === "GOR") {
-        oSelect.addItem(new sap.ui.core.Item({ key: "GSE", text: "GSE Incident" }));
-        oSelect.addItem(new sap.ui.core.Item({ key: "GSE1", text: "Aircraft Damage Occurance" }));
-        oSelect.addItem(new sap.ui.core.Item({ key: "GSE2", text: "Aircraft Damage Noticed" }));
-        oSelect.addItem(new sap.ui.core.Item({ key: "GSE3", text: "Aircraft Loading Error" }));
-        oSelect.addItem(new sap.ui.core.Item({ key: "GSE4", text: "Boarding/Check-in Error" }));
+   if (sKey === "GOR") {
 
-        // auto select first + trigger
-        oSelect.setSelectedKey("GSE");
-        this._toggleGseSection("GSE");
-    }
+   //  reset other sections (HSR / DGOR / SOR leftovers)
+   this.getView().getModel("jse").setProperty("/visible", false);
+   this.getView().getModel("jse1").setProperty("/visible", false);
+   this.getView().getModel("jse2").setProperty("/visible", false);
+   this.getView().getModel("jse3").setProperty("/visible", false);
+
+   this.getView().getModel("kse").setProperty("/visible", false);
+   this.getView().getModel("hse").setProperty("/visible", false);
+
+   // Occurrence Type show
+   this.byId("occTypeSelect").setVisible(true);
+
+   // clear old selection
+   oSelect.setSelectedKey("");
+   oSelect.removeAllItems();
+
+   // add GOR occurrence types
+   oSelect.addItem(new sap.ui.core.Item({ key: "GSE", text: "GSE Incident" }));
+   oSelect.addItem(new sap.ui.core.Item({ key: "GSE1", text: "Aircraft Damage Occurance" }));
+   oSelect.addItem(new sap.ui.core.Item({ key: "GSE2", text: "Aircraft Damage Noticed" }));
+   oSelect.addItem(new sap.ui.core.Item({ key: "GSE3", text: "Aircraft Loading Error" }));
+   oSelect.addItem(new sap.ui.core.Item({ key: "GSE4", text: "Boarding/Check-in Error" }));
+
+   //  no auto select
+   //  no auto toggle
+}
     else if (sKey === "HSR") {
-        oSelect.addItem(new sap.ui.core.Item({ key: "JSE", text: "Injured/ Sick staff details" }));
-        oSelect.addItem(new sap.ui.core.Item({ key: "JSE1", text: "Post Incident Action" }));
-        oSelect.addItem(new sap.ui.core.Item({ key: "JSE2", text: "Incident Witness Details" }));
-        oSelect.addItem(new sap.ui.core.Item({ key: "JSE3", text: "Any GSE Involvement in Injury Case" }));
 
-        oSelect.setSelectedKey("JSE");
-        this._toggleGseSection("JSE");
-    }
-    else if (sKey === "DGOR") {
-        oSelect.addItem(new sap.ui.core.Item({ key: "kSE", text: "kSE" }));
-        oSelect.addItem(new sap.ui.core.Item({ key: "kSE1", text: "kSE1" }));
-        oSelect.addItem(new sap.ui.core.Item({ key: "kSE2", text: "kSE2" }));
-        oSelect.addItem(new sap.ui.core.Item({ key: "kSE3", text: "kSE3" }));
+   //  reset other sections (GOR / DGOR / SOR leftovers)
+   this.getView().getModel("gse").setProperty("/visible", false);
+   this.getView().getModel("gse1").setProperty("/visible", false);
+   this.getView().getModel("gse2").setProperty("/visible", false);
+   this.getView().getModel("gse3").setProperty("/visible", false);
+   this.getView().getModel("gse4").setProperty("/visible", false);
 
-        oSelect.setSelectedKey("kSE");
-        this._toggleGseSection("kse");
-    }
-    else if (sKey === "SOR") {
-        oSelect.addItem(new sap.ui.core.Item({ key: "hSE", text: "hSE" }));
-        oSelect.addItem(new sap.ui.core.Item({ key: "hSE1", text: "hSE1" }));
-        oSelect.addItem(new sap.ui.core.Item({ key: "hSE2", text: "hSE2" }));
-        oSelect.addItem(new sap.ui.core.Item({ key: "hSE3", text: "hSE3" }));
+   this.getView().getModel("kse").setProperty("/visible", false);
+   this.getView().getModel("hse").setProperty("/visible", false);
 
-        oSelect.setSelectedKey("hSE");
-        this._toggleGseSection("hse");
-    }
+   // Occurrence Type show
+   this.byId("occTypeSelect").setVisible(true);
+
+   // clear old selection + items
+   oSelect.setSelectedKey("");
+   oSelect.removeAllItems();
+
+   // add HSR occurrence types
+   oSelect.addItem(new sap.ui.core.Item({ key: "JSE",  text: "Injured/ Sick staff details" }));
+   oSelect.addItem(new sap.ui.core.Item({ key: "JSE1", text: "Post Incident Action" }));
+   oSelect.addItem(new sap.ui.core.Item({ key: "JSE2", text: "Incident Witness Details" }));
+   oSelect.addItem(new sap.ui.core.Item({ key: "JSE3", text: "Any GSE Involvement in Injury Case" }));
+
+   //  no auto select
+   //  no auto toggle
+}
+    // else if (sKey === "DGOR") {
+    //     oSelect.addItem(new sap.ui.core.Item({ key: "kSE", text: "kSE" }));
+    //     oSelect.addItem(new sap.ui.core.Item({ key: "kSE1", text: "kSE1" }));
+    //     oSelect.addItem(new sap.ui.core.Item({ key: "kSE2", text: "kSE2" }));
+    //     oSelect.addItem(new sap.ui.core.Item({ key: "kSE3", text: "kSE3" }));
+
+    //     oSelect.setSelectedKey("kSE");
+    //     this._toggleGseSection("kse");
+    // }
+	else if (sKey === "DGOR") {
+
+   this.byId("occTypeSelect").setVisible(false);
+   
+
+   //  explicitly KSE visible TRUE
+   this.getView().getModel("kse").setProperty("/visible", true);
+      //  others OFF (important)
+   this.getView().getModel("gse").setProperty("/visible", false);
+   this.getView().getModel("gse1").setProperty("/visible", false);
+   this.getView().getModel("gse2").setProperty("/visible", false);
+   this.getView().getModel("gse3").setProperty("/visible", false);
+   this.getView().getModel("gse4").setProperty("/visible", false);
+
+   this.getView().getModel("jse").setProperty("/visible", false);
+   this.getView().getModel("jse1").setProperty("/visible", false);
+   this.getView().getModel("jse2").setProperty("/visible", false);
+   this.getView().getModel("jse3").setProperty("/visible", false);
+
+   this.getView().getModel("hse").setProperty("/visible", false);
+}
+   else if (sKey === "SOR") {
+
+   // hide Occurrence Type
+   this.byId("occTypeSelect").setVisible(false);
+   this.byId
+
+   // SOR ON
+   this.getView().getModel("hse").setProperty("/visible", true);
+
+   //  others OFF
+   this.getView().getModel("gse").setProperty("/visible", false);
+   this.getView().getModel("gse1").setProperty("/visible", false);
+   this.getView().getModel("gse2").setProperty("/visible", false);
+   this.getView().getModel("gse3").setProperty("/visible", false);
+   this.getView().getModel("gse4").setProperty("/visible", false);
+
+   this.getView().getModel("jse").setProperty("/visible", false);
+   this.getView().getModel("jse1").setProperty("/visible", false);
+   this.getView().getModel("jse2").setProperty("/visible", false);
+   this.getView().getModel("jse3").setProperty("/visible", false);
+
+   this.getView().getModel("kse").setProperty("/visible", false);
+}
 },
 
 _toggleGseSection: function (sType) {

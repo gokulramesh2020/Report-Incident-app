@@ -792,12 +792,20 @@
 
 
 <!-- Occurrence Classification -->
-<Label text="Occurrence Classification"/>
-<Select>
-    <core:Item key="1" text="Minor"/>
-    <core:Item key="2" text="Major"/>
-</Select>
+<Label
+   id="lblOccClassification"
+   text="Occurrence Classification"
+   visible="{= !${kse>/visible} &amp;&amp; !${hse>/visible} }"/>
 
+<Select
+   id="selOccClassification"
+   width="50%"
+   visible="{= !${kse>/visible} &amp;&amp; !${hse>/visible} }">
+
+   <core:Item id="occMinor" key="1" text="Minor"/>
+   <core:Item id="occMajor" key="2" text="Major"/>
+
+</Select>
 
 
 						</form:content>
