@@ -274,521 +274,978 @@
 <Input value="{Evidence}"/>
 
 <!-- Occurrence Type -->
-<Label text="Occurrence Type"/>
 
-<!-- <Select id="occTypeSelect"
-        width="100%"
-        forceSelection="false"
-        items="{createView>/occTypes}">
-    <core:Item key="{key}" text="{text}"/>
-</Select> -->
-<Select id="occTypeSelect"
-        width="100%" change="onOccTypeChange">
+<Label
+    text="Occurrence Type"
+    visible="{= !${kse>/visible} &amp;&amp; !${hse>/visible} }"/>
+
+<Select
+    id="occTypeSelect"
+    width="100%"
+    change="onOccTypeChange"
+    visible="{= !${kse>/visible} &amp;&amp; !${hse>/visible} }">
 </Select>
 
 <!-- GSE : GSE Accident -->
-<Label text="GSE Accident" visible="{= ${gse>/visible} }"/>
+<Panel
+    id="pnlGse"
+    headerText="GSE Accident"
+    width="100%"
+    backgroundDesign="Transparent"
+    class="sapUiResponsiveMargin"
+    visible="{= ${gse>/visible} }">
 
-<Label text="GSE Involved" visible="{= ${gse>/visible} }"/>
-<Input visible="{= ${gse>/visible} }"/>
+    <layoutData>
+        <layout:GridData span="L12 M12 S12"/>
+    </layoutData>
 
-<Button text="Add Multiple Assets" visible="{= ${gse>/visible} }"/>
+    <content>
+        <form:SimpleForm
+            id="sfGse"
+            layout="ResponsiveGridLayout"
+            editable="true"
+            columnsXL="1"
+            columnsL="1"
+            columnsM="1"
+            labelSpanL="4"
+            labelSpanM="4"
+            emptySpanL="0"
+            emptySpanM="0">
 
-<Label text="GSE Belongs To" visible="{= ${gse>/visible} }"/>
-<Input visible="{= ${gse>/visible} }"/>
+            <Label id="lblGseInvolved" text="GSE Involved"/>
+            <Input id="inpGseInvolved"/>
 
-<Label text="Any Property Damage" visible="{= ${gse>/visible} }"/>
-<Input visible="{= ${gse>/visible} }"/>
+            <Button
+                id="btnAddAssets"
+                text="Add Multiple Assets"/>
 
-<Label text="Property Damage Details" visible="{= ${gse>/visible} }"/>
-<Input visible="{= ${gse>/visible} }"/>
+            <Label id="lblGseBelongs" text="GSE Belongs To"/>
+            <Input id="inpGseBelongs"/>
 
-<Label text="Was any material released" visible="{= ${gse>/visible} }"/>
-<Input visible="{= ${gse>/visible} }"/>
+            <Label id="lblPropDamage" text="Any Property Damage"/>
+            <Input id="inpPropDamage"/>
 
-<Label text="Stand No" visible="{= ${gse>/visible} }"/>
-<Input visible="{= ${gse>/visible} }"/>
+            <Label id="lblPropDamageDet" text="Property Damage Details"/>
+            <Input id="inpPropDamageDet"/>
 
-<Label text="Involved Staff" visible="{= ${gse>/visible} }"/>
-<Input visible="{= ${gse>/visible} }"/>
+            <Label id="lblMaterialRel" text="Was any material released"/>
+            <Input id="inpMaterialRel"/>
 
-<Button text="Add Multiple Involved Persons" visible="{= ${gse>/visible} }"/>
+            <Label id="lblStandNo" text="Stand No"/>
+            <Input id="inpStandNo"/>
 
-<!-- GSE1 : Aircraft Damage Noticed -->
-<Label text="Airline involved" visible="{= ${gse1>/visible} }"/>
-<Input visible="{= ${gse1>/visible} }"/>
+            <Label id="lblInvolvedStaff" text="Involved Staff"/>
+            <Input id="inpInvolvedStaff"/>
 
-<Label text="Flight No" visible="{= ${gse1>/visible} }"/>
-<Input visible="{= ${gse1>/visible} }"/>
+            <Button
+                id="btnAddInvolvedPersons"
+                text="Add Multiple Involved Persons"/>
 
-<Label text="Aircraft type" visible="{= ${gse1>/visible} }"/>
-<Input visible="{= ${gse1>/visible} }"/>
+        </form:SimpleForm>
+    </content>
+</Panel>
+<!-- GSE1 : Aircraft Damage Occurance -->
+<Panel
+    id="pnlGse1"
+    headerText="Aircraft Damage Occurrence"
+    width="100%"
+    backgroundDesign="Transparent"
+    class="sapUiResponsiveMargin"
+    visible="{= ${gse1>/visible} }">
 
-<Label text="Registration" visible="{= ${gse1>/visible} }"/>
-<Input visible="{= ${gse1>/visible} }"/>
+    <layoutData>
+        <layout:GridData span="L12 M12 S12"/>
+    </layoutData>
 
-<Label text="Stand No" visible="{= ${gse1>/visible} }"/>
-<Input visible="{= ${gse1>/visible} }"/>
+    <content>
+        <form:SimpleForm
+            id="sfGse1"
+            layout="ResponsiveGridLayout"
+            editable="true"
+            columnsXL="1"
+            columnsL="1"
+            columnsM="1"
+            labelSpanL="4"
+            labelSpanM="4"
+            emptySpanL="0"
+            emptySpanM="0">
 
-<Label text="Involved Staff" visible="{= ${gse1>/visible} }"/>
-<Input visible="{= ${gse1>/visible} }"/>
+            <Label id="lblGse1Airline" text="Airline involved"/>
+            <Input id="inpGse1Airline"/>
 
-<Label text="Operations phase" visible="{= ${gse1>/visible} }"/>
-<Input visible="{= ${gse1>/visible} }"/>
+            <Label id="lblGse1Flight" text="Flight No"/>
+            <Input id="inpGse1Flight"/>
 
-<Label text="Origin" visible="{= ${gse1>/visible} }"/>
-<Input visible="{= ${gse1>/visible} }"/>
+            <Label id="lblGse1AcType" text="Aircraft type"/>
+            <Input id="inpGse1AcType"/>
 
-<Label text="Destination" visible="{= ${gse1>/visible} }"/>
-<Input visible="{= ${gse1>/visible} }"/>
+            <Label id="lblGse1Reg" text="Registration"/>
+            <Input id="inpGse1Reg"/>
 
-<Label text="Scheduled Dep" visible="{= ${gse1>/visible} }"/>
-<DateTimePicker visible="{= ${gse1>/visible} }"/>
+            <Label id="lblGse1Stand" text="Stand No"/>
+            <Input id="inpGse1Stand"/>
 
-<Label text="Actual Dep" visible="{= ${gse1>/visible} }"/>
-<DateTimePicker visible="{= ${gse1>/visible} }"/>
+            <Label id="lblGse1Staff" text="Involved Staff"/>
+            <Input id="inpGse1Staff"/>
 
-<Label text="GSE involved" visible="{= ${gse1>/visible} }"/>
-<Input visible="{= ${gse1>/visible} }"/>
+            <Label id="lblGse1Ops" text="Operations phase"/>
+            <Input id="inpGse1Ops"/>
 
-<Button text="Add Multiple Involved Persons" visible="{= ${gse1>/visible} }"/>
+            <Label id="lblGse1Origin" text="Origin"/>
+            <Input id="inpGse1Origin"/>
+
+            <Label id="lblGse1Dest" text="Destination"/>
+            <Input id="inpGse1Dest"/>
+
+            <Label id="lblGse1Sched" text="Scheduled Dep"/>
+            <DateTimePicker id="dtpGse1Sched"/>
+
+            <Label id="lblGse1Act" text="Actual Dep"/>
+            <DateTimePicker id="dtpGse1Act"/>
+
+            <Label id="lblGse1GseInv" text="GSE involved"/>
+            <Input id="inpGse1GseInv"/>
+
+            <Button
+                id="btnGse1AddPersons"
+                text="Add Multiple Involved Persons"/>
+
+        </form:SimpleForm>
+    </content>
+</Panel>
 
 <!-- GSE2 : Aircraft Damage Noticed -->
 
-<Label text="Airline involved" visible="{= ${gse2>/visible} }"/>
-<Input visible="{= ${gse2>/visible} }"/>
+<Panel
+    id="pnlGse2"
+    headerText="Aircraft Damage Noticed"
+    width="100%"
+    backgroundDesign="Transparent"
+    class="sapUiResponsiveMargin"
+    visible="{= ${gse2>/visible} }">
 
-<Label text="Flight No" visible="{= ${gse2>/visible} }"/>
-<Input visible="{= ${gse2>/visible} }"/>
+    <layoutData>
+        <layout:GridData span="L12 M12 S12"/>
+    </layoutData>
 
-<Label text="Aircraft type" visible="{= ${gse2>/visible} }"/>
-<Input visible="{= ${gse2>/visible} }"/>
+    <content>
+        <form:SimpleForm
+            id="sfGse2"
+            layout="ResponsiveGridLayout"
+            editable="true"
+            columnsXL="1"
+            columnsL="1"
+            columnsM="1"
+            labelSpanL="4"
+            labelSpanM="4"
+            emptySpanL="0"
+            emptySpanM="0">
 
-<Label text="Registration" visible="{= ${gse2>/visible} }"/>
-<Input visible="{= ${gse2>/visible} }"/>
+            <Label id="lblGse2Airline" text="Airline involved"/>
+            <Input id="inpGse2Airline"/>
 
-<Label text="Stand No" visible="{= ${gse2>/visible} }"/>
-<Input visible="{= ${gse2>/visible} }"/>
+            <Label id="lblGse2Flight" text="Flight No"/>
+            <Input id="inpGse2Flight"/>
 
-<Label text="Involved Staff" visible="{= ${gse2>/visible} }"/>
-<Input visible="{= ${gse2>/visible} }"/>
+            <Label id="lblGse2AcType" text="Aircraft type"/>
+            <Input id="inpGse2AcType"/>
 
-<Label text="Operations phase" visible="{= ${gse2>/visible} }"/>
-<Input visible="{= ${gse2>/visible} }"/>
+            <Label id="lblGse2Reg" text="Registration"/>
+            <Input id="inpGse2Reg"/>
 
-<Label text="Origin" visible="{= ${gse2>/visible} }"/>
-<Input visible="{= ${gse2>/visible} }"/>
+            <Label id="lblGse2Stand" text="Stand No"/>
+            <Input id="inpGse2Stand"/>
 
-<Label text="Destination" visible="{= ${gse2>/visible} }"/>
-<Input visible="{= ${gse2>/visible} }"/>
+            <Label id="lblGse2Staff" text="Involved Staff"/>
+            <Input id="inpGse2Staff"/>
 
-<Label text="Scheduled Dep" visible="{= ${gse2>/visible} }"/>
-<DateTimePicker visible="{= ${gse2>/visible} }"/>
+            <Label id="lblGse2Ops" text="Operations phase"/>
+            <Input id="inpGse2Ops"/>
 
-<Label text="GSE involved" visible="{= ${gse2>/visible} }"/>
-<Input visible="{= ${gse2>/visible} }"/>
+            <Label id="lblGse2Origin" text="Origin"/>
+            <Input id="inpGse2Origin"/>
 
-<Button text="Add Multiple Involved Persons" visible="{= ${gse2>/visible} }"/>
+            <Label id="lblGse2Dest" text="Destination"/>
+            <Input id="inpGse2Dest"/>
+
+            <Label id="lblGse2Sched" text="Scheduled Dep"/>
+            <DateTimePicker id="dtpGse2Sched"/>
+
+            <Label id="lblGse2GseInv" text="GSE involved"/>
+            <Input id="inpGse2GseInv"/>
+
+            <Button
+                id="btnGse2AddPersons"
+                text="Add Multiple Involved Persons"/>
+
+        </form:SimpleForm>
+    </content>
+</Panel>
 
 <!-- GSE3 : Aircraft Loading Error -->
 
-<Label text="Loading Error type" visible="{= ${gse3>/visible} }"/>
-<Select visible="{= ${gse3>/visible} }"/>
+<Panel
+    id="pnlGse3"
+    headerText="Aircraft Loading Error"
+    width="100%"
+    backgroundDesign="Transparent"
+    class="sapUiResponsiveMargin"
+    visible="{= ${gse3>/visible} }">
 
-<Label text="Airline" visible="{= ${gse3>/visible} }"/>
-<Input visible="{= ${gse3>/visible} }"/>
+    <layoutData>
+        <layout:GridData span="L12 M12 S12"/>
+    </layoutData>
 
-<Label text="Flight No" visible="{= ${gse3>/visible} }"/>
-<Input visible="{= ${gse3>/visible} }"/>
+    <content>
+        <form:SimpleForm
+            id="sfGse3"
+            layout="ResponsiveGridLayout"
+            editable="true"
+            columnsXL="1"
+            columnsL="1"
+            columnsM="1"
+            labelSpanL="4"
+            labelSpanM="4"
+            emptySpanL="0"
+            emptySpanM="0">
 
-<Label text="Aircraft type" visible="{= ${gse3>/visible} }"/>
-<Input visible="{= ${gse3>/visible} }"/>
+            <Label id="lblLoadErrType" text="Loading Error Type"/>
+            <Select id="selLoadErrType">
+                <core:Item key="ILD" text="Incorrect Load Distribution"/>
+                <core:Item key="OVL" text="Overloading"/>
+                <core:Item key="UDL" text="Underloading"/>
+                <core:Item key="ICP" text="Incorrect Cargo Positioning"/>
+                <core:Item key="LSE" text="Load Sheet Error"/>
+                <core:Item key="ULD" text="ULD Misplacement"/>
+                <core:Item key="RES" text="Restraint / Lashing Issue"/>
+                <core:Item key="WBD" text="Weight &amp; Balance Deviation"/>
+                <core:Item key="HUM" text="Human Error During Loading"/>
+                <core:Item key="OTH" text="Other"/>
+            </Select>
 
-<Label text="Registration" visible="{= ${gse3>/visible} }"/>
-<Input visible="{= ${gse3>/visible} }"/>
+            <Label id="lblGse3Airline" text="Airline"/>
+            <Input id="inpGse3Airline"/>
 
-<Label text="Stand No" visible="{= ${gse3>/visible} }"/>
-<Input visible="{= ${gse3>/visible} }"/>
+            <Label id="lblGse3Flight" text="Flight No"/>
+            <Input id="inpGse3Flight"/>
 
-<Label text="Involved Staff" visible="{= ${gse3>/visible} }"/>
-<Input visible="{= ${gse3>/visible} }"/>
+            <Label id="lblGse3AcType" text="Aircraft type"/>
+            <Input id="inpGse3AcType"/>
 
-<Label text="Flown / Not Flown" visible="{= ${gse3>/visible} }"/>
-<Select visible="{= ${gse3>/visible} }"/>
+            <Label id="lblGse3Reg" text="Registration"/>
+            <Input id="inpGse3Reg"/>
 
-<Label text="Weight difference" visible="{= ${gse3>/visible} }"/>
-<Input visible="{= ${gse3>/visible} }"/>
+            <Label id="lblGse3Stand" text="Stand No"/>
+            <Input id="inpGse3Stand"/>
 
-<Label text="Origin - Destination" visible="{= ${gse3>/visible} }"/>
-<Input visible="{= ${gse3>/visible} }"/>
+            <Label id="lblGse3Staff" text="Involved Staff"/>
+            <Input id="inpGse3Staff"/>
 
-<Label text="Scheduled Dep" visible="{= ${gse3>/visible} }"/>
-<DateTimePicker visible="{= ${gse3>/visible} }"/>
+            <Label id="lblFlownStatus" text="Flown / Not Flown"/>
+            <Select id="selFlownStatus">
+                <core:Item key="FL" text="Flown"/>
+                <core:Item key="NFL" text="Not Flown"/>
+            </Select>
 
-<Label text="Actual Dep" visible="{= ${gse3>/visible} }"/>
-<DateTimePicker visible="{= ${gse3>/visible} }"/>
+            <Label id="lblWeightDiff" text="Weight difference"/>
+            <Input id="inpWeightDiff"/>
 
-<Label text="GSE involved" visible="{= ${gse3>/visible} }"/>
-<Input visible="{= ${gse3>/visible} }"/>
+            <Label id="lblGse3OD" text="Origin - Destination"/>
+            <Input id="inpGse3OD"/>
 
-<Button text="Add Multiple Involved Persons" visible="{= ${gse3>/visible} }"/>
+            <Label id="lblGse3Sched" text="Scheduled Dep"/>
+            <DateTimePicker id="dtpGse3Sched"/>
+
+            <Label id="lblGse3Act" text="Actual Dep"/>
+            <DateTimePicker id="dtpGse3Act"/>
+
+            <Label id="lblGse3GseInv" text="GSE involved"/>
+            <Input id="inpGse3GseInv"/>
+
+            <Button
+                id="btnGse3AddPersons"
+                text="Add Multiple Involved Persons"/>
+
+        </form:SimpleForm>
+    </content>
+</Panel>
+
 <!-- GSE4 : Boarding / Check-in Error -->
 
-<Label text="Pax flown / Not flown" visible="{= ${gse4>/visible} }"/>
-<Select visible="{= ${gse4>/visible} }"/>
+<Panel
+    id="pnlGse4"
+    headerText="Boarding / Check-in Error"
+    width="100%"
+    backgroundDesign="Transparent"
+    class="sapUiResponsiveMargin"
+    visible="{= ${gse4>/visible} }">
 
-<Label text="Airline" visible="{= ${gse4>/visible} }"/>
-<Input visible="{= ${gse4>/visible} }"/>
+    <layoutData>
+        <layout:GridData span="L12 M12 S12"/>
+    </layoutData>
 
-<Label text="Flight No" visible="{= ${gse4>/visible} }"/>
-<Input visible="{= ${gse4>/visible} }"/>
+    <content>
+        <form:SimpleForm
+            id="sfGse4"
+            layout="ResponsiveGridLayout"
+            editable="true"
+            columnsXL="1"
+            columnsL="1"
+            columnsM="1"
+            labelSpanL="4"
+            labelSpanM="4"
+            emptySpanL="0"
+            emptySpanM="0">
 
-<Label text="Aircraft type" visible="{= ${gse4>/visible} }"/>
-<Input visible="{= ${gse4>/visible} }"/>
+            <Label id="lblPaxFlown" text="Pax Flown / Not Flown"/>
+            <Select id="selPaxFlown">
+                <core:Item key="F" text="Flown"/>
+                <core:Item key="NF" text="Not Flown"/>
+            </Select>
 
-<Label text="Boarding Gate No" visible="{= ${gse4>/visible} }"/>
-<Input visible="{= ${gse4>/visible} }"/>
+            <Label id="lblGse4Airline" text="Airline"/>
+            <Input id="inpGse4Airline"/>
 
-<Label text="Stand No" visible="{= ${gse4>/visible} }"/>
-<Input visible="{= ${gse4>/visible} }"/>
+            <Label id="lblGse4Flight" text="Flight No"/>
+            <Input id="inpGse4Flight"/>
 
-<Label text="Involved Staff" visible="{= ${gse4>/visible} }"/>
-<Input visible="{= ${gse4>/visible} }"/>
+            <Label id="lblGse4AcType" text="Aircraft type"/>
+            <Input id="inpGse4AcType"/>
 
-<Label text="Pax joining / transit" visible="{= ${gse4>/visible} }"/>
-<Select visible="{= ${gse4>/visible} }"/>
+            <Label id="lblGse4Gate" text="Boarding Gate No"/>
+            <Input id="inpGse4Gate"/>
 
-<Label text="Origin - Destination" visible="{= ${gse4>/visible} }"/>
-<Input visible="{= ${gse4>/visible} }"/>
+            <Label id="lblGse4Stand" text="Stand No"/>
+            <Input id="inpGse4Stand"/>
 
-<Label text="Scheduled Dep" visible="{= ${gse4>/visible} }"/>
-<DateTimePicker visible="{= ${gse4>/visible} }"/>
+            <Label id="lblGse4Staff" text="Involved Staff"/>
+            <Input id="inpGse4Staff"/>
 
-<Label text="Actual Dep" visible="{= ${gse4>/visible} }"/>
-<DateTimePicker visible="{= ${gse4>/visible} }"/>
+            <Label id="lblPaxJoinTransit" text="Pax Joining / Transit"/>
+            <Select id="selPaxJoinTransit">
+                <core:Item key="JOIN" text="Joining Passenger"/>
+                <core:Item key="TRANS" text="Transit Passenger"/>
+            </Select>
 
-<Button text="Add Multiple Involved Persons" visible="{= ${gse4>/visible} }"/>
+            <Label id="lblGse4OD" text="Origin - Destination"/>
+            <Input id="inpGse4OD"/>
+
+            <Label id="lblGse4Sched" text="Scheduled Dep"/>
+            <DateTimePicker id="dtpGse4Sched"/>
+
+            <Label id="lblGse4Act" text="Actual Dep"/>
+            <DateTimePicker id="dtpGse4Act"/>
+
+            <Button
+                id="btnGse4AddPersons"
+                text="Add Multiple Involved Persons"/>
+
+        </form:SimpleForm>
+    </content>
+</Panel>
+
 <!-- JSE : Injured / Sick Staff -->
 
-<Label text="Causality type" visible="{= ${jse>/visible} }"/>
-<Select visible="{= ${jse>/visible} }"/>
+<Panel
+    id="pnlJse"
+    headerText="Injured / Sick Staff Details"
+    width="100%"
+    backgroundDesign="Transparent"
+    class="sapUiResponsiveMargin"
+    visible="{= ${jse>/visible} }">
 
-<Label text="Nature of injury / illness" visible="{= ${jse>/visible} }"/>
-<Select visible="{= ${jse>/visible} }"/>
+    <layoutData>
+        <layout:GridData span="L12 M12 S12"/>
+    </layoutData>
 
-<Label text="Injured staff company name" visible="{= ${jse>/visible} }"/>
-<Input visible="{= ${jse>/visible} }"/>
+    <content>
+        <form:SimpleForm
+            id="sfJse"
+            layout="ResponsiveGridLayout"
+            editable="true"
+            columnsXL="1"
+            columnsL="1"
+            columnsM="1"
+            labelSpanL="4"
+            labelSpanM="4"
+            emptySpanL="0"
+            emptySpanM="0">
 
-<Label text="Injured / sick staff belongs to" visible="{= ${jse>/visible} }"/>
-<Select visible="{= ${jse>/visible} }"/>
+            <Label id="lblJseCausality" text="Causality type"/>
+            <Select id="selJseCausality">
+                <core:Item key="" text="-- Select --"/>
+                <core:Item key="SLIP" text="Slip / Trip / Fall"/>
+                <core:Item key="HIT" text="Hit by Object"/>
+                <core:Item key="MANUAL" text="Manual Handling"/>
+                <core:Item key="EQUIP" text="Equipment Related"/>
+                <core:Item key="OTHER" text="Other"/>
+            </Select>
 
-<Label text="Body parts affected" visible="{= ${jse>/visible} }"/>
-<Input visible="{= ${jse>/visible} }"/>
+            <Label id="lblJseNature" text="Nature of injury / illness"/>
+            <Select id="selJseNature">
+                <core:Item key="" text="-- Select --"/>
+                <core:Item key="CUT" text="Cut / Abrasion"/>
+                <core:Item key="BRUISE" text="Bruise"/>
+                <core:Item key="FRACTURE" text="Fracture"/>
+                <core:Item key="BURN" text="Burn"/>
+                <core:Item key="ILLNESS" text="Illness"/>
+                <core:Item key="OTHER" text="Other"/>
+            </Select>
 
-<Label text="IP staff number" visible="{= ${jse>/visible} }"/>
-<Input visible="{= ${jse>/visible} }"/>
+            <Label id="lblJseCompany" text="Injured staff company name"/>
+            <Input id="inpJseCompany"/>
 
-<Label text="IP mob number" visible="{= ${jse>/visible} }"/>
-<Input visible="{= ${jse>/visible} }"/>
+            <Label id="lblJseBelongs" text="Injured / sick staff belongs to"/>
+            <Select id="selJseBelongs">
+                <core:Item key="" text="-- Select --"/>
+                <core:Item key="COMPANY" text="Company Staff"/>
+                <core:Item key="CONTRACT" text="Contract Staff"/>
+                <core:Item key="GROUND" text="Ground Handling Agency"/>
+                <core:Item key="AIRLINE" text="Airline Staff"/>
+                <core:Item key="OTHER" text="Other"/>
+            </Select>
 
-<Label text="IP email address" visible="{= ${jse>/visible} }"/>
-<Input visible="{= ${jse>/visible} }"/>
+            <Label id="lblJseBodyPart" text="Body parts affected"/>
+            <Input id="inpJseBodyPart"/>
 
-<Label text="Detailed description of incident location" visible="{= ${jse>/visible} }"/>
-<TextArea visible="{= ${jse>/visible} }"/>
+            <Label id="lblJseIpNo" text="IP staff number"/>
+            <Input id="inpJseIpNo"/>
 
-<Label text="More than 1 person injured" visible="{= ${jse>/visible} }"/>
-<Select visible="{= ${jse>/visible} }">
-   <core:Item key="Y" text="Yes"/>
-   <core:Item key="N" text="No"/>
-</Select>
+            <Label id="lblJseIpMob" text="IP mob number"/>
+            <Input id="inpJseIpMob"/>
 
-<Label text="Additional Injured / sick staff details" visible="{= ${jse>/visible} }"/>
-<TextArea visible="{= ${jse>/visible} }"/>
+            <Label id="lblJseIpEmail" text="IP email address"/>
+            <Input id="inpJseIpEmail"/>
+
+            <Label id="lblJseLocDesc" text="Detailed description of incident location"/>
+            <TextArea id="taJseLocDesc"/>
+
+            <Label id="lblJseMore" text="More than 1 person injured"/>
+            <Select id="selJseMore">
+                <core:Item key="Y" text="Yes"/>
+                <core:Item key="N" text="No"/>
+            </Select>
+
+            <Label id="lblJseAddDetails" text="Additional Injured / sick staff details"/>
+            <TextArea id="taJseAddDetails"/>
+
+        </form:SimpleForm>
+    </content>
+</Panel>
+
 <!-- JSE1 : Post Incident Action -->
 
-<Label text="Line Manager notified" visible="{= ${jse1>/visible} }"/>
-<RadioButtonGroup columns="2" visible="{= ${jse1>/visible} }">
-   <buttons>
-      <RadioButton text="Yes"/>
-      <RadioButton text="No"/>
-   </buttons>
-</RadioButtonGroup>
+<Panel
+    id="pnlJse1"
+    headerText="Post Incident Action"
+    width="100%"
+    backgroundDesign="Transparent"
+    class="sapUiResponsiveMargin"
+    visible="{= ${jse1>/visible} }">
 
-<Label text="First aid provided?" visible="{= ${jse1>/visible} }"/>
-<RadioButtonGroup columns="2" visible="{= ${jse1>/visible} }">
-   <buttons>
-      <RadioButton text="Yes"/>
-      <RadioButton text="No"/>
-   </buttons>
-</RadioButtonGroup>
+    <layoutData>
+        <layout:GridData span="L12 M12 S12"/>
+    </layoutData>
 
-<Label text="Ambulance service involved" visible="{= ${jse1>/visible} }"/>
-<RadioButtonGroup columns="2" visible="{= ${jse1>/visible} }">
-   <buttons>
-      <RadioButton text="Yes"/>
-      <RadioButton text="No"/>
-   </buttons>
-</RadioButtonGroup>
+    <content>
+        <form:SimpleForm
+            id="sfJse1"
+            layout="ResponsiveGridLayout"
+            editable="true"
+            columnsXL="1"
+            columnsL="1"
+            columnsM="1"
+            labelSpanL="4"
+            labelSpanM="4"
+            emptySpanL="0"
+            emptySpanM="0">
 
-<Label text="Went to airport clinic" visible="{= ${jse1>/visible} }"/>
-<RadioButtonGroup columns="2" visible="{= ${jse1>/visible} }">
-   <buttons>
-      <RadioButton text="Yes"/>
-      <RadioButton text="No"/>
-   </buttons>
-</RadioButtonGroup>
+            <Label id="lblLmNotified" text="Line Manager notified"/>
+            <RadioButtonGroup id="rbgLmNotified" columns="2">
+                <buttons>
+                    <RadioButton id="rbLmYes" text="Yes"/>
+                    <RadioButton id="rbLmNo" text="No"/>
+                </buttons>
+            </RadioButtonGroup>
 
-<Label text="Went external hospital" visible="{= ${jse1>/visible} }"/>
-<RadioButtonGroup columns="2" visible="{= ${jse1>/visible} }">
-   <buttons>
-      <RadioButton text="Yes"/>
-      <RadioButton text="No"/>
-   </buttons>
-</RadioButtonGroup>
+            <Label id="lblFirstAid" text="First aid provided?"/>
+            <RadioButtonGroup id="rbgFirstAid" columns="2">
+                <buttons>
+                    <RadioButton id="rbFaYes" text="Yes"/>
+                    <RadioButton id="rbFaNo" text="No"/>
+                </buttons>
+            </RadioButtonGroup>
 
-<Label text="Line Manager name" visible="{= ${jse1>/visible} }"/>
-<Input visible="{= ${jse1>/visible} }"/>
+            <Label id="lblAmbulance" text="Ambulance service involved"/>
+            <RadioButtonGroup id="rbgAmbulance" columns="2">
+                <buttons>
+                    <RadioButton id="rbAmbYes" text="Yes"/>
+                    <RadioButton id="rbAmbNo" text="No"/>
+                </buttons>
+            </RadioButtonGroup>
 
-<Label text="First aid provider name" visible="{= ${jse1>/visible} }"/>
-<Input visible="{= ${jse1>/visible} }"/>
+            <Label id="lblClinic" text="Went to airport clinic"/>
+            <RadioButtonGroup id="rbgClinic" columns="2">
+                <buttons>
+                    <RadioButton id="rbClinicYes" text="Yes"/>
+                    <RadioButton id="rbClinicNo" text="No"/>
+                </buttons>
+            </RadioButtonGroup>
+
+            <Label id="lblHospital" text="Went external hospital"/>
+            <RadioButtonGroup id="rbgHospital" columns="2">
+                <buttons>
+                    <RadioButton id="rbHospYes" text="Yes"/>
+                    <RadioButton id="rbHospNo" text="No"/>
+                </buttons>
+            </RadioButtonGroup>
+
+            <Label id="lblLmName" text="Line Manager name"/>
+            <Input id="inpLmName"/>
+
+            <Label id="lblFaProvider" text="First aid provider name"/>
+            <Input id="inpFaProvider"/>
+
+        </form:SimpleForm>
+    </content>
+</Panel>
 
 <!-- JSE2 : Incident Witness Details -->
 
-<Label text="Witness name" visible="{= ${jse2>/visible} }"/>
-<Input visible="{= ${jse2>/visible} }"/>
+<Panel
+    id="pnlJse2"
+    headerText="Incident Witness Details"
+    width="100%"
+    backgroundDesign="Transparent"
+    class="sapUiResponsiveMargin"
+    visible="{= ${jse2>/visible} }">
 
-<Label text="Witness company name" visible="{= ${jse2>/visible} }"/>
-<Input visible="{= ${jse2>/visible} }"/>
+    <layoutData>
+        <layout:GridData span="L12 M12 S12"/>
+    </layoutData>
 
-<Label text="Witness employee ID" visible="{= ${jse2>/visible} }"/>
-<Input visible="{= ${jse2>/visible} }"/>
+    <content>
+        <form:SimpleForm
+            id="sfJse2"
+            layout="ResponsiveGridLayout"
+            editable="true"
+            columnsXL="1"
+            columnsL="1"
+            columnsM="1"
+            labelSpanL="4"
+            labelSpanM="4"
+            emptySpanL="0"
+            emptySpanM="0">
 
-<Label text="Witness contact number" visible="{= ${jse2>/visible} }"/>
-<Input visible="{= ${jse2>/visible} }"/>
+            <Label
+                id="lblJse2WitName"
+                text="Witness name"/>
+            <Input
+                id="inpJse2WitName"
+                placeholder="Enter witness name"/>
 
-<Label text="Witness statement attached" visible="{= ${jse2>/visible} }"/>
-<RadioButtonGroup columns="2" visible="{= ${jse2>/visible} }">
-   <buttons>
-      <RadioButton text="Yes"/>
-      <RadioButton text="No"/>
-   </buttons>
-</RadioButtonGroup>
+            <Label
+                id="lblJse2WitCompany"
+                text="Witness company name"/>
+            <Input
+                id="inpJse2WitCompany"
+                placeholder="Enter company name"/>
+
+            <Label
+                id="lblJse2WitEmpId"
+                text="Witness employee ID"/>
+            <Input
+                id="inpJse2WitEmpId"
+                placeholder="Enter employee ID"/>
+
+            <Label
+                id="lblJse2WitContact"
+                text="Witness contact number"/>
+            <Input
+                id="inpJse2WitContact"
+                placeholder="Enter contact number"
+                type="Tel"/>
+
+            <Label
+                id="lblJse2StmtAttach"
+                text="Witness statement attached"/>
+            <RadioButtonGroup
+                id="rbgJse2StmtAttach"
+                columns="2">
+                <buttons>
+                    <RadioButton
+                        id="rbJse2StmtYes"
+                        text="Yes"/>
+                    <RadioButton
+                        id="rbJse2StmtNo"
+                        text="No"/>
+                </buttons>
+            </RadioButtonGroup>
+
+        </form:SimpleForm>
+    </content>
+</Panel>
 
 <!-- JSE3 : Any GSE Involvement in Injury Case -->
 
-<Label text="GSE 1 Involved" visible="{= ${jse3>/visible} }"/>
-<Input visible="{= ${jse3>/visible} }"/>
+<Panel
+    id="pnlJse3"
+    headerText="GSE Involvement in Injury Case"
+    width="100%"
+    backgroundDesign="Transparent"
+    class="sapUiResponsiveMargin"
+    visible="{= ${jse3>/visible} }">
 
-<Label text="GSE 1 No" visible="{= ${jse3>/visible} }"/>
-<Input visible="{= ${jse3>/visible} }"/>
+    <layoutData>
+        <layout:GridData span="L12 M12 S12"/>
+    </layoutData>
 
-<Label text="GSE belongs to" visible="{= ${jse3>/visible} }"/>
-<Input visible="{= ${jse3>/visible} }"/>
+    <content>
+        <form:SimpleForm
+            id="sfJse3"
+            layout="ResponsiveGridLayout"
+            editable="true"
+            columnsXL="1"
+            columnsL="1"
+            columnsM="1"
+            labelSpanL="4"
+            labelSpanM="4"
+            emptySpanL="0"
+            emptySpanM="0">
 
-<Label text="GSE 2 Involved" visible="{= ${jse3>/visible} }"/>
-<Input visible="{= ${jse3>/visible} }"/>
+            <Label id="lblGse1Inv" text="GSE 1 Involved"/>
+            <Input id="inpGse1Inv"/>
 
-<Label text="GSE 2 No" visible="{= ${jse3>/visible} }"/>
-<Input visible="{= ${jse3>/visible} }"/>
+            <Label id="lblGse1No" text="GSE 1 No"/>
+            <Input id="inpGse1No"/>
 
-<Label text="GSE belongs to" visible="{= ${jse3>/visible} }"/>
-<Input visible="{= ${jse3>/visible} }"/>
+            <Label id="lblGse1Belongs" text="GSE belongs to"/>
+            <Input id="inpGse1Belongs"/>
 
-<Label text="Any Property damage" visible="{= ${jse3>/visible} }"/>
-<Input visible="{= ${jse3>/visible} }"/>
+            <Label id="lblGse2Inv" text="GSE 2 Involved"/>
+            <Input id="inpGse2Inv"/>
 
-<Label text="Property damage details" visible="{= ${jse3>/visible} }"/>
-<TextArea visible="{= ${jse3>/visible} }"/>
+            <Label id="lblGse2No" text="GSE 2 No"/>
+            <Input id="inpGse2No"/>
 
-<Label text="Was any material released" visible="{= ${jse3>/visible} }"/>
-<Input visible="{= ${jse3>/visible} }"/>
+            <Label id="lblGse2Belongs" text="GSE belongs to"/>
+            <Input id="inpGse2Belongs"/>
 
-<Label text="Location" visible="{= ${jse3>/visible} }"/>
-<Select visible="{= ${jse3>/visible} }"/>
+            <Label id="lblPropDmg" text="Any Property damage"/>
+            <Input id="inpPropDmg"/>
 
-<Label text="GSE Operator name" visible="{= ${jse3>/visible} }"/>
-<Input visible="{= ${jse3>/visible} }"/>
+            <Label id="lblPropDmgDet" text="Property damage details"/>
+            <TextArea id="taPropDmgDet"/>
 
-<Label text="Operator statement available" visible="{= ${jse3>/visible} }"/>
-<RadioButtonGroup columns="2" visible="{= ${jse3>/visible} }">
-   <buttons>
-      <RadioButton text="Yes"/>
-      <RadioButton text="No"/>
-   </buttons>
-</RadioButtonGroup>
+            <Label id="lblMatRel" text="Was any material released"/>
+            <Input id="inpMatRel"/>
 
-<Label text="Operator Contact number" visible="{= ${jse3>/visible} }"/>
-<Input visible="{= ${jse3>/visible} }"/>
+            <Label id="lblLocation" text="Location"/>
+            <Select id="selLocation"/>
+
+            <Label id="lblOperatorName" text="GSE Operator name"/>
+            <Input id="inpOperatorName"/>
+
+            <Label id="lblOpStmt" text="Operator statement available"/>
+            <RadioButtonGroup id="rbgOpStmt" columns="2">
+                <buttons>
+                    <RadioButton id="rbOpYes" text="Yes"/>
+                    <RadioButton id="rbOpNo" text="No"/>
+                </buttons>
+            </RadioButtonGroup>
+
+            <Label id="lblOpContact" text="Operator Contact number"/>
+            <Input id="inpOpContact"/>
+
+        </form:SimpleForm>
+    </content>
+</Panel>
 
 <!-- kSE : DGOR Dangerous Goods -->
 
-<Label text="Airline" visible="{= ${kse>/visible} }"/>
-<Input visible="{= ${kse>/visible} }"/>
+<Panel
+    id="pnlKseDgor"
+    headerText="Dangerous Goods (DGOR)"
+    width="100%"
+    backgroundDesign="Transparent"
+    class="sapUiResponsiveMargin"
+    visible="{= ${kse>/visible} }">
 
-<Label text="Flight Date" visible="{= ${kse>/visible} }"/>
-<DatePicker visible="{= ${kse>/visible} }"/>
+    <layoutData>
+        <layout:GridData span="L12 M12 S12"/>
+    </layoutData>
 
-<Label text="Flight Number" visible="{= ${kse>/visible} }"/>
-<Input visible="{= ${kse>/visible} }"/>
+    <content>
+        <form:SimpleForm
+            id="sfKseDgor"
+            layout="ResponsiveGridLayout"
+            editable="true"
+            columnsXL="1"
+            columnsL="1"
+            columnsM="1"
+            labelSpanL="4"
+            labelSpanM="4"
+            emptySpanL="0"
+            emptySpanM="0">
 
-<Label text="Aircraft Registration" visible="{= ${kse>/visible} }"/>
-<Input visible="{= ${kse>/visible} }"/>
+            <!-- Airline -->
+            <Label id="lblKseAirline" text="Airline"/>
+            <Input id="inpKseAirline"/>
 
-<Label text="Aircraft type" visible="{= ${kse>/visible} }"/>
-<Input visible="{= ${kse>/visible} }"/>
+            <!-- Flight Date -->
+            <Label id="lblKseFlightDate" text="Flight Date"/>
+            <DatePicker id="dpKseFlightDate"/>
 
-<Label text="Origin Airport" visible="{= ${kse>/visible} }"/>
-<Select visible="{= ${kse>/visible} }"/>
+            <!-- Flight Number -->
+            <Label id="lblKseFlightNo" text="Flight Number"/>
+            <Input id="inpKseFlightNo"/>
 
-<Label text="Destination airport" visible="{= ${kse>/visible} }"/>
-<Select visible="{= ${kse>/visible} }"/>
+            <!-- Aircraft Registration -->
+            <Label id="lblKseAircraftReg" text="Aircraft Registration"/>
+            <Input id="inpKseAircraftReg"/>
 
-<Label text="Origin of the goods" visible="{= ${kse>/visible} }"/>
-<Input visible="{= ${kse>/visible} }"/>
+            <!-- Aircraft Type -->
+            <Label id="lblKseAircraftType" text="Aircraft Type"/>
+            <Input id="inpKseAircraftType"/>
 
-<Label text="Proper shipping name" visible="{= ${kse>/visible} }"/>
-<Input visible="{= ${kse>/visible} }"/>
+            <!-- Origin Airport -->
+            <Label id="lblKseOriginAirport" text="Origin Airport"/>
+            <Select id="selKseOriginAirport">
+                <items>
+                    <core:Item key="" text="-- Select --"/>
+                    <core:Item key="MAA" text="MAA - Chennai International Airport"/>
+                    <core:Item key="DEL" text="DEL - Indira Gandhi International Airport"/>
+                    <core:Item key="BLR" text="BLR - Kempegowda International Airport"/>
+                    <core:Item key="BOM" text="BOM - Mumbai International Airport"/>
+                    <core:Item key="DXB" text="DXB - Dubai International Airport"/>
+                    <core:Item key="SIN" text="SIN - Singapore Changi Airport"/>
+                    <core:Item key="LHR" text="LHR - London Heathrow Airport"/>
+                </items>
+            </Select>
 
-<Label text="UN/ID number" visible="{= ${kse>/visible} }"/>
-<Input visible="{= ${kse>/visible} }"/>
+            <!-- Destination Airport -->
+            <Label id="lblKseDestAirport" text="Destination Airport"/>
+            <Select id="selKseDestAirport">
+                <items>
+                    <core:Item key="" text="-- Select --"/>
+                    <core:Item key="MAA" text="MAA - Chennai International Airport"/>
+                    <core:Item key="DEL" text="DEL - Indira Gandhi International Airport"/>
+                    <core:Item key="BLR" text="BLR - Kempegowda International Airport"/>
+                    <core:Item key="BOM" text="BOM - Mumbai International Airport"/>
+                    <core:Item key="DXB" text="DXB - Dubai International Airport"/>
+                    <core:Item key="SIN" text="SIN - Singapore Changi Airport"/>
+                    <core:Item key="LHR" text="LHR - London Heathrow Airport"/>
+                </items>
+            </Select>
 
-<Label text="Class/division" visible="{= ${kse>/visible} }"/>
-<Select visible="{= ${kse>/visible} }"/>
+            <!-- Origin of Goods -->
+            <Label id="lblKseGoodsOrigin" text="Origin of the Goods"/>
+            <Input id="inpKseGoodsOrigin"/>
 
-<Label text="Subsidiary hazard(s)" visible="{= ${kse>/visible} }"/>
-<Select visible="{= ${kse>/visible} }"/>
+            <!-- Proper Shipping Name -->
+            <Label id="lblKseShippingName" text="Proper Shipping Name"/>
+            <Input id="inpKseShippingName"/>
 
-<Label text="Packing group" visible="{= ${kse>/visible} }"/>
-<Select visible="{= ${kse>/visible} }"/>
+            <!-- UN / ID Number -->
+            <Label id="lblKseUnId" text="UN / ID Number"/>
+            <Input id="inpKseUnId"/>
 
-<Label text="Category (class 7 only)" visible="{= ${kse>/visible} }"/>
-<Select visible="{= ${kse>/visible} }"/>
+            <!-- Class / Division -->
+            <Label id="lblKseClassDivision" text="Class / Division"/>
+            <Select id="selKseClassDivision">
+                <items>
+                    <core:Item key="" text="-- Select --"/>
+                    <core:Item key="1" text="Class 1 - Explosives"/>
+                    <core:Item key="2.1" text="Class 2.1 - Flammable Gas"/>
+                    <core:Item key="2.2" text="Class 2.2 - Non-Flammable Gas"/>
+                    <core:Item key="2.3" text="Class 2.3 - Toxic Gas"/>
+                    <core:Item key="3" text="Class 3 - Flammable Liquids"/>
+                    <core:Item key="4.1" text="Class 4.1 - Flammable Solids"/>
+                    <core:Item key="4.2" text="Class 4.2 - Spontaneously Combustible"/>
+                    <core:Item key="4.3" text="Class 4.3 - Dangerous When Wet"/>
+                    <core:Item key="5.1" text="Class 5.1 - Oxidizers"/>
+                    <core:Item key="5.2" text="Class 5.2 - Organic Peroxides"/>
+                    <core:Item key="6.1" text="Class 6.1 - Toxic Substances"/>
+                    <core:Item key="6.2" text="Class 6.2 - Infectious Substances"/>
+                    <core:Item key="7" text="Class 7 - Radioactive Material"/>
+                    <core:Item key="8" text="Class 8 - Corrosives"/>
+                    <core:Item key="9" text="Class 9 - Miscellaneous DG"/>
+                </items>
+            </Select>
 
-<Label text="Type of packaging" visible="{= ${kse>/visible} }"/>
-<Input visible="{= ${kse>/visible} }"/>
+            <!-- Subsidiary Hazard -->
+            <Label id="lblKseSubsHazard" text="Subsidiary Hazard(s)"/>
+            <Select id="selKseSubsHazard">
+                <items>
+                    <core:Item key="NONE" text="None"/>
+                    <core:Item key="TOX" text="Toxic"/>
+                    <core:Item key="COR" text="Corrosive"/>
+                    <core:Item key="FLAM" text="Flammable"/>
+                    <core:Item key="OX" text="Oxidizing"/>
+                    <core:Item key="RAD" text="Radioactive"/>
+                </items>
+            </Select>
 
-<Label text="Packaging specification marking" visible="{= ${kse>/visible} }"/>
-<Input visible="{= ${kse>/visible} }"/>
+            <!-- Packing Group -->
+            <Label id="lblKsePackingGroup" text="Packing Group"/>
+            <Select id="selKsePackingGroup">
+                <items>
+                    <core:Item key="" text="-- Select --"/>
+                    <core:Item key="I" text="Packing Group I - High Danger"/>
+                    <core:Item key="II" text="Packing Group II - Medium Danger"/>
+                    <core:Item key="III" text="Packing Group III - Low Danger"/>
+                </items>
+            </Select>
 
-<Label text="Number of Packages" visible="{= ${kse>/visible} }"/>
-<Input type="Number" visible="{= ${kse>/visible} }"/>
+            <!-- Type of Packaging -->
+            <Label id="lblKsePkgType" text="Type of Packaging"/>
+            <Input id="inpKsePkgType"/>
 
-<Label text="Quantity / Transport index" visible="{= ${kse>/visible} }"/>
-<Input visible="{= ${kse>/visible} }"/>
+            <!-- No of Packages -->
+            <Label id="lblKsePkgCount" text="Number of Packages"/>
+            <Input id="inpKsePkgCount" type="Number"/>
 
-<Label text="Air Waybill reference number" visible="{= ${kse>/visible} }"/>
-<Input visible="{= ${kse>/visible} }"/>
+            <!-- Air Waybill -->
+            <Label id="lblKseAwb" text="Air Waybill Reference Number"/>
+            <Input id="inpKseAwb"/>
 
-<Label text="Courier pouch / baggage tag / passenger ticket" visible="{= ${kse>/visible} }"/>
-<Input visible="{= ${kse>/visible} }"/>
+            <!-- Ground Phase -->
+            <Label id="lblKseGroundPhase" text="Ground Phase of Event"/>
+            <Select id="selKseGroundPhase">
+                <items>
+                    <core:Item key="" text="-- Select --"/>
+                    <core:Item key="ACC" text="Acceptance"/>
+                    <core:Item key="STO" text="Storage / Warehousing"/>
+                    <core:Item key="BLD" text="Build-up / Loading"/>
+                    <core:Item key="RMP" text="Ramp Handling"/>
+                    <core:Item key="LOD" text="Aircraft Loading"/>
+                    <core:Item key="ULD" text="Aircraft Unloading"/>
+                    <core:Item key="TRN" text="Transit / Transfer"/>
+                    <core:Item key="DEL" text="Delivery"/>
+                </items>
+            </Select>
 
-<Label text="Name and address of shipper/agent/passenger" visible="{= ${kse>/visible} }"/>
-
-
-<Label text="Packaging OK?" visible="{= ${kse>/visible} }"/>
-<RadioButtonGroup columns="2" visible="{= ${kse>/visible} }">
- <buttons>
-  <RadioButton text="Yes"/>
-  <RadioButton text="No"/>
- </buttons>
-</RadioButtonGroup>
-
-<Label text="Properly Secure" visible="{= ${kse>/visible} }"/>
-<RadioButtonGroup columns="2" visible="{= ${kse>/visible} }">
- <buttons>
-  <RadioButton text="Yes"/>
-  <RadioButton text="No"/>
- </buttons>
-</RadioButtonGroup>
-
-<Label text="Leakage" visible="{= ${kse>/visible} }"/>
-<RadioButtonGroup columns="2" visible="{= ${kse>/visible} }">
- <buttons>
-  <RadioButton text="Yes"/>
-  <RadioButton text="No"/>
- </buttons>
-</RadioButtonGroup>
-
-<Label text="DGR Declaration Available" visible="{= ${kse>/visible} }"/>
-<RadioButtonGroup columns="2" visible="{= ${kse>/visible} }">
- <buttons>
-  <RadioButton text="Yes"/>
-  <RadioButton text="No"/>
- </buttons>
-</RadioButtonGroup>
-
-<Label text="Ground Phase of Event" visible="{= ${kse>/visible} }"/>
-<Select visible="{= ${kse>/visible} }"/>
+        </form:SimpleForm>
+    </content>
+</Panel>
 
 <!-- HSE Main -->
 
-<Label text="Threat Type" visible="{= ${hse>/visible} }"/>
-<Select visible="{= ${hse>/visible} }"/>
+<Panel
+    id="pnlHseSor"
+    headerText="Security Occurrence (SOR)"
+    width="100%"
+    backgroundDesign="Transparent"
+    class="sapUiResponsiveMargin"
+    visible="{= ${hse>/visible} }">
 
-<Label text="Threat Sub-type" visible="{= ${hse>/visible} }"/>
-<Select visible="{= ${hse>/visible} }"/>
-<Label text="Was an aircraft involved?" visible="{= ${hse>/visible} }"/>
+    <layoutData>
+        <layout:GridData span="L12 M12 S12"/>
+    </layoutData>
 
-<RadioButtonGroup columns="2"
-   visible="{= ${hse>/visible} }"
-   select=".onAircraftSelect">
+    <content>
+        <form:SimpleForm
+            id="sfHseSor"
+            layout="ResponsiveGridLayout"
+            editable="true"
+            columnsXL="1"
+            columnsL="1"
+            columnsM="1"
+            labelSpanL="4"
+            labelSpanM="4"
+            emptySpanL="0"
+            emptySpanM="0">
 
-   <buttons>
-      <RadioButton text="Yes"/>
-      <RadioButton text="No"/>
-   </buttons>
+            <!-- Threat Type -->
+            <Label id="lblHseThreatType" text="Threat Type"/>
+            <Select id="selHseThreatType">
+                <items>
+                    <core:Item key="" text="-- Select --"/>
+                    <core:Item key="BOMB" text="Bomb Threat"/>
+                    <core:Item key="SAB" text="Sabotage"/>
+                    <core:Item key="HIJ" text="Hijacking"/>
+                    <core:Item key="SEC" text="Security Breach"/>
+                    <core:Item key="CYB" text="Cyber Threat"/>
+                    <core:Item key="OTH" text="Other"/>
+                </items>
+            </Select>
 
-</RadioButtonGroup>
-<!-- HSE was there aircraft involved? -->
+            <!-- Threat Sub Type -->
+            <Label id="lblHseThreatSubType" text="Threat Sub-type"/>
+            <Select id="selHseThreatSubType">
+                <items>
+                    <core:Item key="" text="-- Select --"/>
+                    <core:Item key="TEL" text="Telephone Call"/>
+                    <core:Item key="EMA" text="Email"/>
+                    <core:Item key="SOC" text="Social Media"/>
+                    <core:Item key="WRI" text="Written Message"/>
+                    <core:Item key="VER" text="Verbal Threat"/>
+                    <core:Item key="UNK" text="Unknown"/>
+                </items>
+            </Select>
 
-<Label text="Airline" visible="{= ${hse>/aircraft} }"/>
-<Input visible="{= ${hse>/aircraft} }"/>
+            <!-- Aircraft involved -->
+            <Label id="lblHseAircraftInv" text="Was an aircraft involved?"/>
+            <RadioButtonGroup
+                id="rbgHseAircraftInv"
+                columns="2"
+                select="onAircraftSelect">
+                <buttons>
+                    <RadioButton id="rbHseAircraftYes" text="Yes"/>
+                    <RadioButton id="rbHseAircraftNo" text="No"/>
+                </buttons>
+            </RadioButtonGroup>
 
-<Label text="Flight Date" visible="{= ${hse>/aircraft} }"/>
-<DatePicker visible="{= ${hse>/aircraft} }"/>
+            <!-- Aircraft details -->
+            <Label id="lblHseAirline" text="Airline" visible="{= ${hse>/aircraft} }"/>
+            <Input id="inpHseAirline" visible="{= ${hse>/aircraft} }"/>
 
-<Label text="Flight Number" visible="{= ${hse>/aircraft} }"/>
-<Input visible="{= ${hse>/aircraft} }"/>
+            <Label id="lblHseFlightDate" text="Flight Date" visible="{= ${hse>/aircraft} }"/>
+            <DatePicker id="dpHseFlightDate" visible="{= ${hse>/aircraft} }"/>
 
-<Label text="Aircraft Registration" visible="{= ${hse>/aircraft} }"/>
-<Input visible="{= ${hse>/aircraft} }"/>
+            <Label id="lblHseFlightNo" text="Flight Number" visible="{= ${hse>/aircraft} }"/>
+            <Input id="inpHseFlightNo" visible="{= ${hse>/aircraft} }"/>
 
-<Label text="Aircraft Type" visible="{= ${hse>/aircraft} }"/>
-<Input visible="{= ${hse>/aircraft} }"/>
+            <Label id="lblHseAcReg" text="Aircraft Registration" visible="{= ${hse>/aircraft} }"/>
+            <Input id="inpHseAcReg" visible="{= ${hse>/aircraft} }"/>
 
-<Label text="Stand" visible="{= ${hse>/aircraft} }"/>
-<Input visible="{= ${hse>/aircraft} }"/>
-<!-- HSE was there person involved? -->
+            <Label id="lblHseAcType" text="Aircraft Type" visible="{= ${hse>/aircraft} }"/>
+            <Input id="inpHseAcType" visible="{= ${hse>/aircraft} }"/>
 
+            <Label id="lblHseStand" text="Stand" visible="{= ${hse>/aircraft} }"/>
+            <Input id="inpHseStand" visible="{= ${hse>/aircraft} }"/>
 
-<Label text="Was a passenger involved?" visible="{= ${hse>/visible} }"/>
+            <!-- Passenger involved -->
+            <Label id="lblHsePaxInv" text="Was a passenger involved?"/>
+            <RadioButtonGroup
+                id="rbgHsePaxInv"
+                columns="2"
+                select="onPassengerSelect">
+                <buttons>
+                    <RadioButton id="rbHsePaxYes" text="Yes"/>
+                    <RadioButton id="rbHsePaxNo" text="No"/>
+                </buttons>
+            </RadioButtonGroup>
 
-<RadioButtonGroup columns="2"
-   visible="{= ${hse>/visible} }"
-   select=".onPassengerSelect">
+            <!-- Passenger details -->
+            <Label id="lblHsePaxName" text="Pax Name" visible="{= ${hse>/pax} }"/>
+            <Input id="inpHsePaxName" visible="{= ${hse>/pax} }"/>
 
-   <buttons>
-      <RadioButton text="Yes"/>
-      <RadioButton text="No"/>
-   </buttons>
-</RadioButtonGroup>
+            <Label id="lblHsePaxNat" text="Pax Nationality" visible="{= ${hse>/pax} }"/>
+            <Input id="inpHsePaxNat" visible="{= ${hse>/pax} }"/>
 
-<!-- HSE was there person involved? yes fields -->
-<Label text="Pax Name" visible="{= ${hse>/pax} }"/>
-<Input visible="{= ${hse>/pax} }"/>
+            <Label id="lblHseSeatNo" text="Seat Number" visible="{= ${hse>/pax} }"/>
+            <Input id="inpHseSeatNo" visible="{= ${hse>/pax} }"/>
 
-<Label text="Pax Nationality" visible="{= ${hse>/pax} }"/>
-<Input visible="{= ${hse>/pax} }"/>
+            <Label id="lblHsePaxContact" text="Pax Contact" visible="{= ${hse>/pax} }"/>
+            <Input id="inpHsePaxContact" visible="{= ${hse>/pax} }"/>
 
-<Label text="Seat Number" visible="{= ${hse>/pax} }"/>
-<Input visible="{= ${hse>/pax} }"/>
+            <Label id="lblHseGate" text="Gate" visible="{= ${hse>/pax} }"/>
+            <Input id="inpHseGate" visible="{= ${hse>/pax} }"/>
 
-<Label text="Pax Contact" visible="{= ${hse>/pax} }"/>
-<Input visible="{= ${hse>/pax} }"/>
-
-<Label text="Gate" visible="{= ${hse>/pax} }"/>
-<Input visible="{= ${hse>/pax} }"/>
+        </form:SimpleForm>
+    </content>
+</Panel>
 
 
 <!-- Occurrence Classification -->

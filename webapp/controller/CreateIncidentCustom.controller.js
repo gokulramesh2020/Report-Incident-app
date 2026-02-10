@@ -948,7 +948,7 @@ setTimeout(function () {
 
    // hide Occurrence Type
    this.byId("occTypeSelect").setVisible(false);
-   this.byId
+   
 
    // SOR ON
    this.getView().getModel("hse").setProperty("/visible", true);
